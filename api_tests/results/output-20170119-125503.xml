@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generated="20170119 12:55:03.318" generator="Robot 3.0.1 (Python 2.7.13 on win32)">
+<suite source="C:\workspace\projects\automox_tests\api_tests\playAround" id="s1" name="playAround">
+<suite source="C:\workspace\projects\automox_tests\api_tests\playAround\api_tests_playAround.robot" id="s1-s1" name="api tests playAround">
+<kw type="setup" name="Create Session To Automox API Server" library="api_keywords_playAround">
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>${VALID USER}</arg>
+<arg>${VALID PASSWORD}</arg>
+</arguments>
+<assign>
+<var>${auth}</var>
+</assign>
+<msg timestamp="20170119 12:55:03.522" level="INFO">${auth} = [u'mark@patchsimple.com', u'markmark']</msg>
+<status status="PASS" endtime="20170119 12:55:03.522" starttime="20170119 12:55:03.521"></status>
+</kw>
+<kw name="Create Session" library="RequestsKeywords">
+<doc>Create Session: create a HTTP session to a server</doc>
+<arguments>
+<arg>automoxapi</arg>
+<arg>${API SERVER}</arg>
+<arg>auth=${auth}</arg>
+<arg>verify=False</arg>
+<arg>disable_warnings=0</arg>
+</arguments>
+<msg timestamp="20170119 12:55:03.522" level="INFO">Creating Session using : alias=automoxapi, url=https://staging.automox.com/api, headers={},                     cookies=None, auth=&lt;requests.auth.HTTPBasicAuth object at 0x037E8AD0&gt;, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" endtime="20170119 12:55:03.523" starttime="20170119 12:55:03.522"></status>
+</kw>
+<status status="PASS" endtime="20170119 12:55:03.523" starttime="20170119 12:55:03.521"></status>
+</kw>
+<test id="s1-s1-t1" name="Create a Custom Policy">
+<kw name="Custom Policy should be created successfully" library="api_keywords_playAround">
+<arguments>
+<arg>api-custom-policy-01</arg>
+<arg>${1}</arg>
+<arg>Linux</arg>
+<arg>test_code.sh</arg>
+<arg>evaluation_code.sh</arg>
+<arg>remediation_code.sh</arg>
+<arg>${254}</arg>
+<arg>14:10</arg>
+<arg>This is api-custom-policy-01</arg>
+</arguments>
+<msg timestamp="20170119 12:55:03.524" level="FAIL">Keyword 'api_keywords_playAround.Custom Policy should be created successfully' expected 0 arguments, got 9.</msg>
+<status status="FAIL" endtime="20170119 12:55:03.524" starttime="20170119 12:55:03.524"></status>
+</kw>
+<status status="FAIL" endtime="20170119 12:55:03.525" critical="yes" starttime="20170119 12:55:03.523">Keyword 'api_keywords_playAround.Custom Policy should be created successfully' expected 0 arguments, got 9.</status>
+</test>
+<kw type="teardown" name="API Suite Cleanup" library="api_keywords_playAround">
+<kw name="Run Keyword And Ignore Error" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<arguments>
+<arg>Delete Policy</arg>
+<arg>api-sw-deployment-policy-01</arg>
+<arg>${1}</arg>
+</arguments>
+<kw name="Delete Policy" library="api_keywords_playAround">
+<arguments>
+<arg>api-sw-deployment-policy-01</arg>
+<arg>${1}</arg>
+</arguments>
+<kw name="Get Request" library="RequestsKeywords">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>automoxapi</arg>
+<arg>/policies</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20170119 12:55:05.181" level="INFO">Get Request using : alias=automoxapi, uri=/policies, headers=None </msg>
+<msg timestamp="20170119 12:55:05.181" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170119 12:55:05.181" starttime="20170119 12:55:03.529"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${resp.json()}</arg>
+</arguments>
+<assign>
+<var>@{resp_json}</var>
+</assign>
+<msg timestamp="20170119 12:55:05.182" level="INFO">@{resp_json} = [ {u'name': u'Patch Policy Foo', u'schedule_time': u'01:00', u'schedule_days': 254, u'organization_id': 1, u'create_time': u'2017-01-02 01:47:06.774433', u'notes': u'Notes blah', u'policy_type_name': ...</msg>
+<status status="PASS" endtime="20170119 12:55:05.182" starttime="20170119 12:55:05.181"></status>
+</kw>
+<kw name="Get Policy Id" library="HelperKeywords">
+<arguments>
+<arg>${resp_json}</arg>
+<arg>${policy_name}</arg>
+</arguments>
+<assign>
+<var>${policy_id}</var>
+</assign>
+<msg timestamp="20170119 12:55:05.183" level="INFO">${policy_id} = None</msg>
+<msg timestamp="20170119 12:55:05.184" level="FAIL">Policy Name not found in Policy  List: [{u'name': u'Patch Policy Foo', u'schedule_time': u'01:00', u'schedule_days': 254, u'organization_id': 1, u'create_time': u'2017-01-02 01:47:06.774433', u'notes': u'Notes blah', u'policy_type_name': u'patch', u'configuration': {u'auto_patch': False, u'auto_reboot': False}, u'id': 1}, {u'name': u'Custom Policy Bar', u'schedule_time': u'01:00', u'schedule_days': 254, u'organization_id': 1, u'create_time': u'2017-01-02 01:47:06.790431', u'notes': u'Notes blah', u'policy_type_name': u'custom', u'configuration': {u'test_code': u'', u'os_family': u'Windows', u'evaluation_code': u'#!/bin/bash\n/bin/testit', u'remediation_code': u'#!/bin/bash\n/bin/fixit'}, u'id': 3}, {u'name': u'Windows OS Patching Policy', u'schedule_time': u'00:00', u'schedule_days': 254, u'organization_id': 1, u'create_time': u'2017-01-04 19:48:58.173251', u'notes': u'', u'policy_type_name': u'patch', u'configuration': {u'auto_patch': True, u'auto_reboot': True}, u'id': 5}, {u'name': u'Test Policy - Automatic Patch', u'schedule_time': u'13:40', u'schedule_days': 16, u'organization_id': 1, u'create_time': u'2017-01-05 08:07:59.561102', u'notes': u'This is test policy', u'policy_type_name': u'patch', u'configuration': {u'auto_patch': True, u'auto_reboot': False}, u'id': 12}, {u'name': u'test', u'schedule_time': u'00:00', u'schedule_days': 0, u'organization_id': 1, u'create_time': u'2017-01-13 08:10:10.556417', u'notes': u'some notes here', u'policy_type_name': u'patch', u'configuration': {u'auto_patch': True, u'auto_reboot': False}, u'id': 24}, {u'name': u'api-custom-policy-01', u'schedule_time': u'14:10', u'schedule_days': 254, u'organization_id': 1, u'create_time': u'2017-01-19 07:19:56.391143', u'notes': u'This is api-custom-policy-01', u'policy_type_name': u'custom', u'configuration': {u'test_code': u'#!\\/bin\\/bash\\n\\n#Example Test Script for installing chrome on Linux machines\\n#This script has been tested with Fedora 24 and Ubuntu 16.04.01 LTS\\n#This script may not work on all systems. Modify to fit your needs\\n\\nfunction Test_Chrome() {\\n\\tcat \\/etc\\/*release* | grep -E \'(Fedora|Red Hat)\' &gt;&amp; \\/dev\\/null\\n\\tif [[ $? -eq 0 ]]; then\\n\\t\\t\\trpm -qa | grep \\"google-chrome-stable\\" &gt;&amp; \\/dev\\/null\\n\\t\\t\\tif [[ $? -eq 0 ]]; then\\n\\t\\t\\t\\techo \\"Test_Chrome script has detected Chrome.\\" 1&gt;&amp;2\\n\\t\\t\\t\\treturn 0 #package is installed\\n\\t\\t\\telse\\n\\t\\t\\t\\techo \\"Test_Chrome Script failed! Remediation scipt needs to run\\" 1&gt;&amp;2\\n\\t\\t\\t\\treturn 1 #package is not installed\\n\\t\\t\\tfi\\n\\n\\tfi\\n\\n\\tcat \\/etc\\/*release* | grep -E \'(Ubuntu|Debian)\' &amp;&gt; \\/dev\\/null\\n\\tif [[ $? -eq 0 ]]; then\\n\\t\\tdpkg -l | grep \\"google-chrome-stable\\" &gt;&amp; \\/dev\\/null\\n\\t\\tif [[ $? -eq 0 ]]; then\\n\\t\\t\\t\\techo \\"Test_Chrome script has detected Chrome.\\" 1&gt;&amp;2\\n\\t\\t\\t\\treturn 0\\n\\t\\t\\telse\\n\\t\\t\\t\\techo \\"Test_Chrome Script failed! Remediation scipt needs to run\\" 1&gt;&amp;2\\n\\t\\t\\t\\treturn 1\\n\\t\\t\\tfi\\n\\tfi\\n}\\nTest_Chrome\\nexit $?\\n\n', u'os_family': u'Linux', u'evaluation_code': u'#!\\/bin\\/bash\\n\\n#Example Test Script for installing chrome on Linux machines\\n#This script has been tested with Fedora 24 and Ubuntu 16.04.01 LTS\\n#This script may not work on all systems. Modify to fit your needs\\n\\nfunction Test_Chrome() {\\n\\tcat \\/etc\\/*release* | grep -E \'(Fedora|Red Hat)\' &gt;&amp; \\/dev\\/null\\n\\tif [[ $? -eq 0 ]]; then\\n\\t\\t\\trpm -qa | grep \\"google-chrome-stable\\" &gt;&amp; \\/dev\\/null\\n\\t\\t\\tif [[ $? -eq 0 ]]; then\\n\\t\\t\\t\\techo \\"Test_Chrome script has detected Chrome.\\" 1&gt;&amp;2\\n\\t\\t\\t\\treturn 0 #package is installed\\n\\t\\t\\telse\\n\\t\\t\\t\\techo \\"Test_Chrome Script failed! Remediation scipt needs to run\\" 1&gt;&amp;2\\n\\t\\t\\t\\treturn 1 #package is not installed\\n\\t\\t\\tfi\\n\\n\\tfi\\n\\n\\tcat \\/etc\\/*release* | grep -E \'(Ubuntu|Debian)\' &amp;&gt; \\/dev\\/null\\n\\tif [[ $? -eq 0 ]]; then\\n\\t\\tdpkg -l | grep \\"google-chrome-stable\\" &gt;&amp; \\/dev\\/null\\n\\t\\tif [[ $? -eq 0 ]]; then\\n\\t\\t\\t\\techo \\"Test_Chrome script has detected Chrome.\\" 1&gt;&amp;2\\n\\t\\t\\t\\treturn 0\\n\\t\\t\\telse\\n\\t\\t\\t\\techo \\"Test_Chrome Script failed! Remediation scipt needs to run\\" 1&gt;&amp;2\\n\\t\\t\\t\\treturn 1\\n\\t\\t\\tfi\\n\\tfi\\n}\\nTest_Chrome\\nexit $?\\n\n', u'remediation_code': u'#!\\/bin\\/bash\\n\\n#Example Remediation Script for installing chrome on Linux machines\\n#This script has been tested with Fedora 24 and Ubuntu 16.04.01 LTS\\n#This script may not work on all systems. Modify to fit your needs\\n\\ncat \\/etc\\/*release* | grep -E \'(Fedora|Red Hat)\' &gt;&amp; \\/dev\\/null\\nif [[ $? -eq 0 ]]; then\\n#Add Chrome Repo:\\necho \\"[google-chrome]\\nname=google-chrome - \\\\$basearch\\nbaseurl=http:\\/\\/dl.google.com\\/linux\\/chrome\\/rpm\\/stable\\/\\\\$basearch\\nenabled=1\\ngpgcheck=1\\ngpgkey=https:\\/\\/dl-ssl.google.com\\/linux\\/linux_signing_key.pub\\" &gt; \\/etc\\/yum.repos.d\\/google-chrome.repo\\n#Install Chrome:\\nyum install google-chrome-stable -y &amp;&gt; \\/dev\\/null\\nfi\\n\\ncat \\/etc\\/*release* | grep -E \'(Ubuntu|Debian)\' &gt;&amp; \\/dev\\/null\\nif [[ $? -eq 0 ]]; then\\n\\techo \\"deb http:\\/\\/dl.google.com\\/linux\\/chrome\\/deb\\/ stable main\\" &gt;&gt; \\/etc\\/apt\\/sources.list.d\\n\\twget -q -O - https:\\/\\/dl-ssl.google.com\\/linux\\/linux_signing_key.pub | apt-key add -\\n\\tapt-get update\\n\\tapt-get install google-chrome-stable -y &amp;&gt; \\/dev\\/null\\nfi\\n\n'}, u'id': 103}]</msg>
+<status status="FAIL" endtime="20170119 12:55:05.184" starttime="20170119 12:55:05.182"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${policy_id}</arg>
+</arguments>
+<msg timestamp="20170119 12:55:05.185" level="INFO">None</msg>
+<status status="PASS" endtime="20170119 12:55:05.185" starttime="20170119 12:55:05.185"></status>
+</kw>
+<kw name="Convert To Integer" library="BuiltIn">
+<doc>Converts the given item to an integer number.</doc>
+<arguments>
+<arg>${policy_id}</arg>
+</arguments>
+<assign>
+<var>${policy_id_int}</var>
+</assign>
+<msg timestamp="20170119 12:55:05.185" level="INFO">${policy_id_int} = None</msg>
+<msg timestamp="20170119 12:55:05.186" level="FAIL">'None' cannot be converted to an integer: TypeError: int() argument must be a string or a number, not 'NoneType'</msg>
+<status status="FAIL" endtime="20170119 12:55:05.186" starttime="20170119 12:55:05.185"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>o=${organization_id}</arg>
+</arguments>
+<assign>
+<var>${params}</var>
+</assign>
+<msg timestamp="20170119 12:55:05.186" level="INFO">${params} = {u'o': 1}</msg>
+<status status="PASS" endtime="20170119 12:55:05.186" starttime="20170119 12:55:05.186"></status>
+</kw>
+<kw name="Delete Request" library="RequestsKeywords">
+<doc>Send a DELETE request on the session object found using the</doc>
+<arguments>
+<arg>automoxapi</arg>
+<arg>/policies/${policy_id_int}</arg>
+<arg>params=${params}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20170119 12:55:05.508" level="INFO">Delete Request using : alias=automoxapi, uri=/policies/None, data=(),                     headers=None, allow_redirects=True </msg>
+<msg timestamp="20170119 12:55:05.508" level="INFO">${resp} = &lt;Response [500]&gt;</msg>
+<status status="PASS" endtime="20170119 12:55:05.509" starttime="20170119 12:55:05.186"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${resp.content}</arg>
+</arguments>
+<msg timestamp="20170119 12:55:05.509" level="INFO">{"errors":["An unexpected error occurred, please contact support if this problem persists."]}</msg>
+<status status="PASS" endtime="20170119 12:55:05.510" starttime="20170119 12:55:05.509"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>204</arg>
+</arguments>
+<msg timestamp="20170119 12:55:05.510" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20170119 12:55:05.510" level="FAIL">500 != 204</msg>
+<status status="FAIL" endtime="20170119 12:55:05.510" starttime="20170119 12:55:05.510"></status>
+</kw>
+<status status="FAIL" endtime="20170119 12:55:05.511" starttime="20170119 12:55:03.528"></status>
+</kw>
+<status status="PASS" endtime="20170119 12:55:05.511" starttime="20170119 12:55:03.528"></status>
+</kw>
+<kw name="Run Keyword And Ignore Error" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<arguments>
+<arg>Delete Policy</arg>
+<arg>api-patch-policy-01</arg>
+<arg>${1}</arg>
+</arguments>
+<kw name="Delete Policy" library="api_keywords_playAround">
+<arguments>
+<arg>api-patch-policy-01</arg>
+<arg>${1}</arg>
+</arguments>
+<kw name="Get Request" library="RequestsKeywords">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>automoxapi</arg>
+<arg>/policies</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20170119 12:55:05.835" level="INFO">Get Request using : alias=automoxapi, uri=/policies, headers=None </msg>
+<msg timestamp="20170119 12:55:05.836" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170119 12:55:05.836" starttime="20170119 12:55:05.511"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${resp.json()}</arg>
+</arguments>
+<assign>
+<var>@{resp_json}</var>
+</assign>
+<msg timestamp="20170119 12:55:05.837" level="INFO">@{resp_json} = [ {u'name': u'Patch Policy Foo', u'schedule_time': u'01:00', u'schedule_days': 254, u'organization_id': 1, u'create_time': u'2017-01-02 01:47:06.774433', u'notes': u'Notes blah', u'policy_type_name': ...</msg>
+<status status="PASS" endtime="20170119 12:55:05.837" starttime="20170119 12:55:05.836"></status>
+</kw>
+<kw name="Get Policy Id" library="HelperKeywords">
+<arguments>
+<arg>${resp_json}</arg>
+<arg>${policy_name}</arg>
+</arguments>
+<assign>
+<var>${policy_id}</var>
+</assign>
+<msg timestamp="20170119 12:55:05.838" level="INFO">${policy_id} = None</msg>
+<msg timestamp="20170119 12:55:05.838" level="FAIL">Policy Name not found in Policy  List: [{u'name': u'Patch Policy Foo', u'schedule_time': u'01:00', u'schedule_days': 254, u'organization_id': 1, u'create_time': u'2017-01-02 01:47:06.774433', u'notes': u'Notes blah', u'policy_type_name': u'patch', u'configuration': {u'auto_patch': False, u'auto_reboot': False}, u'id': 1}, {u'name': u'Custom Policy Bar', u'schedule_time': u'01:00', u'schedule_days': 254, u'organization_id': 1, u'create_time': u'2017-01-02 01:47:06.790431', u'notes': u'Notes blah', u'policy_type_name': u'custom', u'configuration': {u'test_code': u'', u'os_family': u'Windows', u'evaluation_code': u'#!/bin/bash\n/bin/testit', u'remediation_code': u'#!/bin/bash\n/bin/fixit'}, u'id': 3}, {u'name': u'Windows OS Patching Policy', u'schedule_time': u'00:00', u'schedule_days': 254, u'organization_id': 1, u'create_time': u'2017-01-04 19:48:58.173251', u'notes': u'', u'policy_type_name': u'patch', u'configuration': {u'auto_patch': True, u'auto_reboot': True}, u'id': 5}, {u'name': u'Test Policy - Automatic Patch', u'schedule_time': u'13:40', u'schedule_days': 16, u'organization_id': 1, u'create_time': u'2017-01-05 08:07:59.561102', u'notes': u'This is test policy', u'policy_type_name': u'patch', u'configuration': {u'auto_patch': True, u'auto_reboot': False}, u'id': 12}, {u'name': u'test', u'schedule_time': u'00:00', u'schedule_days': 0, u'organization_id': 1, u'create_time': u'2017-01-13 08:10:10.556417', u'notes': u'some notes here', u'policy_type_name': u'patch', u'configuration': {u'auto_patch': True, u'auto_reboot': False}, u'id': 24}, {u'name': u'api-custom-policy-01', u'schedule_time': u'14:10', u'schedule_days': 254, u'organization_id': 1, u'create_time': u'2017-01-19 07:19:56.391143', u'notes': u'This is api-custom-policy-01', u'policy_type_name': u'custom', u'configuration': {u'test_code': u'#!\\/bin\\/bash\\n\\n#Example Test Script for installing chrome on Linux machines\\n#This script has been tested with Fedora 24 and Ubuntu 16.04.01 LTS\\n#This script may not work on all systems. Modify to fit your needs\\n\\nfunction Test_Chrome() {\\n\\tcat \\/etc\\/*release* | grep -E \'(Fedora|Red Hat)\' &gt;&amp; \\/dev\\/null\\n\\tif [[ $? -eq 0 ]]; then\\n\\t\\t\\trpm -qa | grep \\"google-chrome-stable\\" &gt;&amp; \\/dev\\/null\\n\\t\\t\\tif [[ $? -eq 0 ]]; then\\n\\t\\t\\t\\techo \\"Test_Chrome script has detected Chrome.\\" 1&gt;&amp;2\\n\\t\\t\\t\\treturn 0 #package is installed\\n\\t\\t\\telse\\n\\t\\t\\t\\techo \\"Test_Chrome Script failed! Remediation scipt needs to run\\" 1&gt;&amp;2\\n\\t\\t\\t\\treturn 1 #package is not installed\\n\\t\\t\\tfi\\n\\n\\tfi\\n\\n\\tcat \\/etc\\/*release* | grep -E \'(Ubuntu|Debian)\' &amp;&gt; \\/dev\\/null\\n\\tif [[ $? -eq 0 ]]; then\\n\\t\\tdpkg -l | grep \\"google-chrome-stable\\" &gt;&amp; \\/dev\\/null\\n\\t\\tif [[ $? -eq 0 ]]; then\\n\\t\\t\\t\\techo \\"Test_Chrome script has detected Chrome.\\" 1&gt;&amp;2\\n\\t\\t\\t\\treturn 0\\n\\t\\t\\telse\\n\\t\\t\\t\\techo \\"Test_Chrome Script failed! Remediation scipt needs to run\\" 1&gt;&amp;2\\n\\t\\t\\t\\treturn 1\\n\\t\\t\\tfi\\n\\tfi\\n}\\nTest_Chrome\\nexit $?\\n\n', u'os_family': u'Linux', u'evaluation_code': u'#!\\/bin\\/bash\\n\\n#Example Test Script for installing chrome on Linux machines\\n#This script has been tested with Fedora 24 and Ubuntu 16.04.01 LTS\\n#This script may not work on all systems. Modify to fit your needs\\n\\nfunction Test_Chrome() {\\n\\tcat \\/etc\\/*release* | grep -E \'(Fedora|Red Hat)\' &gt;&amp; \\/dev\\/null\\n\\tif [[ $? -eq 0 ]]; then\\n\\t\\t\\trpm -qa | grep \\"google-chrome-stable\\" &gt;&amp; \\/dev\\/null\\n\\t\\t\\tif [[ $? -eq 0 ]]; then\\n\\t\\t\\t\\techo \\"Test_Chrome script has detected Chrome.\\" 1&gt;&amp;2\\n\\t\\t\\t\\treturn 0 #package is installed\\n\\t\\t\\telse\\n\\t\\t\\t\\techo \\"Test_Chrome Script failed! Remediation scipt needs to run\\" 1&gt;&amp;2\\n\\t\\t\\t\\treturn 1 #package is not installed\\n\\t\\t\\tfi\\n\\n\\tfi\\n\\n\\tcat \\/etc\\/*release* | grep -E \'(Ubuntu|Debian)\' &amp;&gt; \\/dev\\/null\\n\\tif [[ $? -eq 0 ]]; then\\n\\t\\tdpkg -l | grep \\"google-chrome-stable\\" &gt;&amp; \\/dev\\/null\\n\\t\\tif [[ $? -eq 0 ]]; then\\n\\t\\t\\t\\techo \\"Test_Chrome script has detected Chrome.\\" 1&gt;&amp;2\\n\\t\\t\\t\\treturn 0\\n\\t\\t\\telse\\n\\t\\t\\t\\techo \\"Test_Chrome Script failed! Remediation scipt needs to run\\" 1&gt;&amp;2\\n\\t\\t\\t\\treturn 1\\n\\t\\t\\tfi\\n\\tfi\\n}\\nTest_Chrome\\nexit $?\\n\n', u'remediation_code': u'#!\\/bin\\/bash\\n\\n#Example Remediation Script for installing chrome on Linux machines\\n#This script has been tested with Fedora 24 and Ubuntu 16.04.01 LTS\\n#This script may not work on all systems. Modify to fit your needs\\n\\ncat \\/etc\\/*release* | grep -E \'(Fedora|Red Hat)\' &gt;&amp; \\/dev\\/null\\nif [[ $? -eq 0 ]]; then\\n#Add Chrome Repo:\\necho \\"[google-chrome]\\nname=google-chrome - \\\\$basearch\\nbaseurl=http:\\/\\/dl.google.com\\/linux\\/chrome\\/rpm\\/stable\\/\\\\$basearch\\nenabled=1\\ngpgcheck=1\\ngpgkey=https:\\/\\/dl-ssl.google.com\\/linux\\/linux_signing_key.pub\\" &gt; \\/etc\\/yum.repos.d\\/google-chrome.repo\\n#Install Chrome:\\nyum install google-chrome-stable -y &amp;&gt; \\/dev\\/null\\nfi\\n\\ncat \\/etc\\/*release* | grep -E \'(Ubuntu|Debian)\' &gt;&amp; \\/dev\\/null\\nif [[ $? -eq 0 ]]; then\\n\\techo \\"deb http:\\/\\/dl.google.com\\/linux\\/chrome\\/deb\\/ stable main\\" &gt;&gt; \\/etc\\/apt\\/sources.list.d\\n\\twget -q -O - https:\\/\\/dl-ssl.google.com\\/linux\\/linux_signing_key.pub | apt-key add -\\n\\tapt-get update\\n\\tapt-get install google-chrome-stable -y &amp;&gt; \\/dev\\/null\\nfi\\n\n'}, u'id': 103}]</msg>
+<status status="FAIL" endtime="20170119 12:55:05.839" starttime="20170119 12:55:05.837"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${policy_id}</arg>
+</arguments>
+<msg timestamp="20170119 12:55:05.839" level="INFO">None</msg>
+<status status="PASS" endtime="20170119 12:55:05.839" starttime="20170119 12:55:05.839"></status>
+</kw>
+<kw name="Convert To Integer" library="BuiltIn">
+<doc>Converts the given item to an integer number.</doc>
+<arguments>
+<arg>${policy_id}</arg>
+</arguments>
+<assign>
+<var>${policy_id_int}</var>
+</assign>
+<msg timestamp="20170119 12:55:05.840" level="INFO">${policy_id_int} = None</msg>
+<msg timestamp="20170119 12:55:05.840" level="FAIL">'None' cannot be converted to an integer: TypeError: int() argument must be a string or a number, not 'NoneType'</msg>
+<status status="FAIL" endtime="20170119 12:55:05.840" starttime="20170119 12:55:05.839"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>o=${organization_id}</arg>
+</arguments>
+<assign>
+<var>${params}</var>
+</assign>
+<msg timestamp="20170119 12:55:05.840" level="INFO">${params} = {u'o': 1}</msg>
+<status status="PASS" endtime="20170119 12:55:05.840" starttime="20170119 12:55:05.840"></status>
+</kw>
+<kw name="Delete Request" library="RequestsKeywords">
+<doc>Send a DELETE request on the session object found using the</doc>
+<arguments>
+<arg>automoxapi</arg>
+<arg>/policies/${policy_id_int}</arg>
+<arg>params=${params}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20170119 12:55:06.163" level="INFO">Delete Request using : alias=automoxapi, uri=/policies/None, data=(),                     headers=None, allow_redirects=True </msg>
+<msg timestamp="20170119 12:55:06.164" level="INFO">${resp} = &lt;Response [500]&gt;</msg>
+<status status="PASS" endtime="20170119 12:55:06.164" starttime="20170119 12:55:05.840"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${resp.content}</arg>
+</arguments>
+<msg timestamp="20170119 12:55:06.167" level="INFO">{"errors":["An unexpected error occurred, please contact support if this problem persists."]}</msg>
+<status status="PASS" endtime="20170119 12:55:06.167" starttime="20170119 12:55:06.165"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>204</arg>
+</arguments>
+<msg timestamp="20170119 12:55:06.169" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20170119 12:55:06.170" level="FAIL">500 != 204</msg>
+<status status="FAIL" endtime="20170119 12:55:06.171" starttime="20170119 12:55:06.168"></status>
+</kw>
+<status status="FAIL" endtime="20170119 12:55:06.172" starttime="20170119 12:55:05.511"></status>
+</kw>
+<status status="PASS" endtime="20170119 12:55:06.173" starttime="20170119 12:55:05.511"></status>
+</kw>
+<kw name="Run Keyword And Ignore Error" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<arguments>
+<arg>Delete Policy Set</arg>
+<arg>api-policy-set-01</arg>
+<arg>${1}</arg>
+</arguments>
+<kw name="Delete Policy Set" library="api_keywords_playAround">
+<arguments>
+<arg>api-policy-set-01</arg>
+<arg>${1}</arg>
+</arguments>
+<kw name="Get Request" library="RequestsKeywords">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>automoxapi</arg>
+<arg>/policysets</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20170119 12:55:06.513" level="INFO">Get Request using : alias=automoxapi, uri=/policysets, headers=None </msg>
+<msg timestamp="20170119 12:55:06.514" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170119 12:55:06.514" starttime="20170119 12:55:06.175"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${resp.json()}</arg>
+</arguments>
+<assign>
+<var>@{resp_json}</var>
+</assign>
+<msg timestamp="20170119 12:55:06.515" level="INFO">@{resp_json} = [ {u'name': u'PolicySet 2', u'notes': u'Some more notes', u'organization_id': 1, u'create_time': u'2017-01-02 01:47:06.796947', u'policies': [], u'id': 2} | {u'name': u'PolicySet 1', u'notes': u'Some ...</msg>
+<status status="PASS" endtime="20170119 12:55:06.515" starttime="20170119 12:55:06.514"></status>
+</kw>
+<kw name="Get Policy Set Id" library="HelperKeywords">
+<arguments>
+<arg>${resp_json}</arg>
+<arg>${policy_set_name}</arg>
+</arguments>
+<assign>
+<var>${policy_set_id}</var>
+</assign>
+<msg timestamp="20170119 12:55:06.517" level="INFO">${policy_set_id} = None</msg>
+<msg timestamp="20170119 12:55:06.518" level="FAIL">Policy Set Name not found in Policy Set List: [{u'name': u'PolicySet 2', u'notes': u'Some more notes', u'organization_id': 1, u'create_time': u'2017-01-02 01:47:06.796947', u'policies': [], u'id': 2}, {u'name': u'PolicySet 1', u'notes': u'Some notes', u'organization_id': 1, u'create_time': u'2017-01-02 01:47:06.793462', u'policies': [1, 12], u'id': 1}]</msg>
+<status status="FAIL" endtime="20170119 12:55:06.518" starttime="20170119 12:55:06.516"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${policy_set_id}</arg>
+</arguments>
+<msg timestamp="20170119 12:55:06.519" level="INFO">None</msg>
+<status status="PASS" endtime="20170119 12:55:06.519" starttime="20170119 12:55:06.518"></status>
+</kw>
+<kw name="Convert To Integer" library="BuiltIn">
+<doc>Converts the given item to an integer number.</doc>
+<arguments>
+<arg>${policy_set_id}</arg>
+</arguments>
+<assign>
+<var>${policy_set_id_int}</var>
+</assign>
+<msg timestamp="20170119 12:55:06.520" level="INFO">${policy_set_id_int} = None</msg>
+<msg timestamp="20170119 12:55:06.520" level="FAIL">'None' cannot be converted to an integer: TypeError: int() argument must be a string or a number, not 'NoneType'</msg>
+<status status="FAIL" endtime="20170119 12:55:06.520" starttime="20170119 12:55:06.519"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>o=${organization_id}</arg>
+</arguments>
+<assign>
+<var>${params}</var>
+</assign>
+<msg timestamp="20170119 12:55:06.522" level="INFO">${params} = {u'o': 1}</msg>
+<status status="PASS" endtime="20170119 12:55:06.522" starttime="20170119 12:55:06.521"></status>
+</kw>
+<kw name="Delete Request" library="RequestsKeywords">
+<doc>Send a DELETE request on the session object found using the</doc>
+<arguments>
+<arg>automoxapi</arg>
+<arg>/policysets/${policy_set_id_int}</arg>
+<arg>params=${params}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20170119 12:55:06.860" level="INFO">Delete Request using : alias=automoxapi, uri=/policysets/None, data=(),                     headers=None, allow_redirects=True </msg>
+<msg timestamp="20170119 12:55:06.861" level="INFO">${resp} = &lt;Response [404]&gt;</msg>
+<status status="PASS" endtime="20170119 12:55:06.861" starttime="20170119 12:55:06.522"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${resp.content}</arg>
+</arguments>
+<msg timestamp="20170119 12:55:06.865" level="INFO">{}</msg>
+<status status="PASS" endtime="20170119 12:55:06.865" starttime="20170119 12:55:06.863"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>204</arg>
+</arguments>
+<msg timestamp="20170119 12:55:06.868" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20170119 12:55:06.869" level="FAIL">404 != 204</msg>
+<status status="FAIL" endtime="20170119 12:55:06.870" starttime="20170119 12:55:06.866"></status>
+</kw>
+<status status="FAIL" endtime="20170119 12:55:06.871" starttime="20170119 12:55:06.174"></status>
+</kw>
+<status status="PASS" endtime="20170119 12:55:06.871" starttime="20170119 12:55:06.173"></status>
+</kw>
+<kw name="Run Keyword And Ignore Error" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<arguments>
+<arg>Delete Group</arg>
+<arg>api-group-01</arg>
+<arg>${1}</arg>
+</arguments>
+<kw name="Delete Group" library="api_keywords_playAround">
+<arguments>
+<arg>api-group-01</arg>
+<arg>${1}</arg>
+</arguments>
+<kw name="Get Request" library="RequestsKeywords">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>automoxapi</arg>
+<arg>/servergroups</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20170119 12:55:07.208" level="INFO">Get Request using : alias=automoxapi, uri=/servergroups, headers=None </msg>
+<msg timestamp="20170119 12:55:07.209" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170119 12:55:07.209" starttime="20170119 12:55:06.875"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${resp.json()}</arg>
+</arguments>
+<assign>
+<var>@{resp_json}</var>
+</assign>
+<msg timestamp="20170119 12:55:07.210" level="INFO">@{resp_json} = [ {u'name': u'', u'policy_set_id': 1, u'parent_server_group_id': 1, u'override': True, u'id': 1, u'refresh_interval': 1440} ]</msg>
+<status status="PASS" endtime="20170119 12:55:07.211" starttime="20170119 12:55:07.209"></status>
+</kw>
+<kw name="Get Group Id" library="HelperKeywords">
+<arguments>
+<arg>${resp_json}</arg>
+<arg>${group_name}</arg>
+</arguments>
+<assign>
+<var>${group_id}</var>
+</assign>
+<msg timestamp="20170119 12:55:07.212" level="INFO">${group_id} = None</msg>
+<msg timestamp="20170119 12:55:07.212" level="FAIL">Group Name not found in Group List: [{u'name': u'', u'policy_set_id': 1, u'parent_server_group_id': 1, u'override': True, u'id': 1, u'refresh_interval': 1440}]</msg>
+<status status="FAIL" endtime="20170119 12:55:07.212" starttime="20170119 12:55:07.211"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${group_id}</arg>
+</arguments>
+<msg timestamp="20170119 12:55:07.213" level="INFO">None</msg>
+<status status="PASS" endtime="20170119 12:55:07.213" starttime="20170119 12:55:07.213"></status>
+</kw>
+<kw name="Convert To Integer" library="BuiltIn">
+<doc>Converts the given item to an integer number.</doc>
+<arguments>
+<arg>${group_id}</arg>
+</arguments>
+<assign>
+<var>${group_id_int}</var>
+</assign>
+<msg timestamp="20170119 12:55:07.214" level="INFO">${group_id_int} = None</msg>
+<msg timestamp="20170119 12:55:07.215" level="FAIL">'None' cannot be converted to an integer: TypeError: int() argument must be a string or a number, not 'NoneType'</msg>
+<status status="FAIL" endtime="20170119 12:55:07.215" starttime="20170119 12:55:07.214"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>o=${organization_id}</arg>
+</arguments>
+<assign>
+<var>${params}</var>
+</assign>
+<msg timestamp="20170119 12:55:07.216" level="INFO">${params} = {u'o': 1}</msg>
+<status status="PASS" endtime="20170119 12:55:07.216" starttime="20170119 12:55:07.215"></status>
+</kw>
+<kw name="Delete Request" library="RequestsKeywords">
+<doc>Send a DELETE request on the session object found using the</doc>
+<arguments>
+<arg>automoxapi</arg>
+<arg>/servergroups/${group_id_int}</arg>
+<arg>params=${params}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20170119 12:55:07.545" level="INFO">Delete Request using : alias=automoxapi, uri=/servergroups/None, data=(),                     headers=None, allow_redirects=True </msg>
+<msg timestamp="20170119 12:55:07.546" level="INFO">${resp} = &lt;Response [500]&gt;</msg>
+<status status="PASS" endtime="20170119 12:55:07.546" starttime="20170119 12:55:07.216"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${resp.content}</arg>
+</arguments>
+<msg timestamp="20170119 12:55:07.547" level="INFO">{"errors":["An unexpected error occurred, please contact support if this problem persists."]}</msg>
+<status status="PASS" endtime="20170119 12:55:07.548" starttime="20170119 12:55:07.546"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>204</arg>
+</arguments>
+<msg timestamp="20170119 12:55:07.549" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20170119 12:55:07.550" level="FAIL">500 != 204</msg>
+<status status="FAIL" endtime="20170119 12:55:07.550" starttime="20170119 12:55:07.548"></status>
+</kw>
+<status status="FAIL" endtime="20170119 12:55:07.551" starttime="20170119 12:55:06.874"></status>
+</kw>
+<status status="PASS" endtime="20170119 12:55:07.552" starttime="20170119 12:55:06.872"></status>
+</kw>
+<kw name="Delete All Sessions" library="RequestsKeywords">
+<doc>Removes all the session objects</doc>
+<msg timestamp="20170119 12:55:07.553" level="INFO">Delete All Sessions</msg>
+<status status="PASS" endtime="20170119 12:55:07.553" starttime="20170119 12:55:07.552"></status>
+</kw>
+<status status="PASS" endtime="20170119 12:55:07.554" starttime="20170119 12:55:03.528"></status>
+</kw>
+<doc>API Functional Tests for Automox</doc>
+<metadata>
+<item name="Executed At">LAPTOP-3RS03335</item>
+<item name="Operating System">Windows_NT</item>
+<item name="Processor">6</item>
+<item name="Test Framework">Robot Framework Python</item>
+<item name="Test User">CopperTaurus</item>
+<item name="Version">1.0</item>
+</metadata>
+<status status="FAIL" endtime="20170119 12:55:07.554" starttime="20170119 12:55:03.348"></status>
+</suite>
+<status status="FAIL" endtime="20170119 12:55:07.558" starttime="20170119 12:55:03.323"></status>
+</suite>
+<statistics>
+<total>
+<stat fail="1" pass="0">Critical Tests</stat>
+<stat fail="1" pass="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat fail="1" id="s1" name="playAround" pass="0">playAround</stat>
+<stat fail="1" id="s1-s1" name="api tests playAround" pass="0">playAround.api tests playAround</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

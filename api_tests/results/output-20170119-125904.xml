@@ -1,0 +1,2056 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generated="20170119 12:59:04.640" generator="Robot 3.0.1 (Python 2.7.13 on win32)">
+<suite source="C:\workspace\projects\automox_tests\api_tests\tests" id="s1" name="Tests">
+<suite source="C:\workspace\projects\automox_tests\api_tests\tests\api_tests.robot" id="s1-s1" name="Api Tests">
+<kw type="setup" name="Create Session To Automox API Server" library="api_keywords">
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>${VALID USER}</arg>
+<arg>${VALID PASSWORD}</arg>
+</arguments>
+<assign>
+<var>${auth}</var>
+</assign>
+<msg timestamp="20170119 12:59:04.850" level="INFO">${auth} = [u'mark@patchsimple.com', u'markmark']</msg>
+<status status="PASS" endtime="20170119 12:59:04.850" starttime="20170119 12:59:04.849"></status>
+</kw>
+<kw name="Create Session" library="RequestsKeywords">
+<doc>Create Session: create a HTTP session to a server</doc>
+<arguments>
+<arg>automoxapi</arg>
+<arg>${API SERVER}</arg>
+<arg>auth=${auth}</arg>
+<arg>verify=False</arg>
+<arg>disable_warnings=0</arg>
+</arguments>
+<msg timestamp="20170119 12:59:04.850" level="INFO">Creating Session using : alias=automoxapi, url=https://staging.automox.com/api, headers={},                     cookies=None, auth=&lt;requests.auth.HTTPBasicAuth object at 0x041591F0&gt;, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" endtime="20170119 12:59:04.851" starttime="20170119 12:59:04.850"></status>
+</kw>
+<status status="PASS" endtime="20170119 12:59:04.851" starttime="20170119 12:59:04.849"></status>
+</kw>
+<test id="s1-s1-t1" name="AX.TC3 Configuration of Patch Policy">
+<kw name="Create Patch Policy" library="api_keywords">
+<arguments>
+<arg>api-patch-policy-01</arg>
+<arg>${1}</arg>
+<arg>${false}</arg>
+<arg>${true}</arg>
+<arg>${2}</arg>
+<arg>13:10</arg>
+<arg>api-patch-policy-01</arg>
+</arguments>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>auto_patch=${auto_patch}</arg>
+<arg>auto_reboot=${auto_reboot}</arg>
+</arguments>
+<assign>
+<var>&amp;{configuration_dict}</var>
+</assign>
+<msg timestamp="20170119 12:59:04.853" level="INFO">&amp;{configuration_dict} = { auto_patch=False | auto_reboot=True }</msg>
+<status status="PASS" endtime="20170119 12:59:04.853" starttime="20170119 12:59:04.852"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>name=${name}</arg>
+<arg>policy_type_name=patch</arg>
+<arg>organization_id=${organization_id}</arg>
+<arg>configuration=${configuration_dict}</arg>
+<arg>schedule_days=${schedule_days}</arg>
+<arg>schedule_time=${schedule_time}</arg>
+<arg>notes=${notes}</arg>
+</arguments>
+<assign>
+<var>&amp;{patch_policy_dict}</var>
+</assign>
+<msg timestamp="20170119 12:59:04.854" level="INFO">&amp;{patch_policy_dict} = { name=api-patch-policy-01 | policy_type_name=patch | organization_id=1 | configuration={u'auto_patch': False, u'auto_reboot': True} | schedule_days=2 | schedule_time=13:10 | notes=api-patch-policy-01...</msg>
+<status status="PASS" endtime="20170119 12:59:04.854" starttime="20170119 12:59:04.853"></status>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<doc>Evaluates the given expression in Python and returns the results.</doc>
+<arguments>
+<arg>json.dumps(${patch_policy_dict})</arg>
+<arg>json</arg>
+</arguments>
+<assign>
+<var>${json_string}</var>
+</assign>
+<msg timestamp="20170119 12:59:04.855" level="INFO">${json_string} = {"name": "api-patch-policy-01", "schedule_time": "13:10", "schedule_days": 2, "organization_id": 1, "policy_type_name": "patch", "configuration": {"auto_patch": false, "auto_reboot": true}, "notes": "...</msg>
+<status status="PASS" endtime="20170119 12:59:04.855" starttime="20170119 12:59:04.854"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>o=${organization_id}</arg>
+</arguments>
+<assign>
+<var>${params}</var>
+</assign>
+<msg timestamp="20170119 12:59:04.856" level="INFO">${params} = {u'o': 1}</msg>
+<status status="PASS" endtime="20170119 12:59:04.856" starttime="20170119 12:59:04.856"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${json_string}</arg>
+</arguments>
+<msg timestamp="20170119 12:59:04.856" level="INFO">{"name": "api-patch-policy-01", "schedule_time": "13:10", "schedule_days": 2, "organization_id": 1, "policy_type_name": "patch", "configuration": {"auto_patch": false, "auto_reboot": true}, "notes": "api-patch-policy-01"}</msg>
+<status status="PASS" endtime="20170119 12:59:04.856" starttime="20170119 12:59:04.856"></status>
+</kw>
+<kw name="Post Request" library="RequestsKeywords">
+<doc>Send a POST request on the session object found using the</doc>
+<arguments>
+<arg>automoxapi</arg>
+<arg>/policies</arg>
+<arg>data=${json_string}</arg>
+<arg>params=${params}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20170119 12:59:06.479" level="INFO">Post Request using : alias=automoxapi, uri=/policies, data=&lt;empty&gt;, headers=None, files=None, allow_redirects=True </msg>
+<msg timestamp="20170119 12:59:06.480" level="INFO">${resp} = &lt;Response [201]&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:06.480" starttime="20170119 12:59:04.857"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${resp.content}</arg>
+</arguments>
+<msg timestamp="20170119 12:59:06.480" level="INFO">{}</msg>
+<status status="PASS" endtime="20170119 12:59:06.480" starttime="20170119 12:59:06.480"></status>
+</kw>
+<status status="PASS" endtime="20170119 12:59:06.480" starttime="20170119 12:59:04.852"></status>
+</kw>
+<kw name="Patch Policy should be created successfully" library="api_keywords">
+<arguments>
+<arg>api-patch-policy-01</arg>
+<arg>${1}</arg>
+<arg>${false}</arg>
+<arg>${true}</arg>
+<arg>${2}</arg>
+<arg>13:10</arg>
+<arg>api-patch-policy-01</arg>
+</arguments>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>auto_patch=${auto_patch}</arg>
+<arg>auto_reboot=${auto_reboot}</arg>
+</arguments>
+<assign>
+<var>&amp;{configuration_dict}</var>
+</assign>
+<msg timestamp="20170119 12:59:06.483" level="INFO">&amp;{configuration_dict} = { auto_patch=False | auto_reboot=True }</msg>
+<status status="PASS" endtime="20170119 12:59:06.483" starttime="20170119 12:59:06.482"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>name=${name}</arg>
+<arg>policy_type_name=patch</arg>
+<arg>organization_id=${organization_id}</arg>
+<arg>configuration=${configuration_dict}</arg>
+<arg>schedule_days=${schedule_days}</arg>
+<arg>schedule_time=${schedule_time}</arg>
+<arg>notes=${notes}</arg>
+</arguments>
+<assign>
+<var>&amp;{patch_policy_dict}</var>
+</assign>
+<msg timestamp="20170119 12:59:06.484" level="INFO">&amp;{patch_policy_dict} = { name=api-patch-policy-01 | policy_type_name=patch | organization_id=1 | configuration={u'auto_patch': False, u'auto_reboot': True} | schedule_days=2 | schedule_time=13:10 | notes=api-patch-policy-01...</msg>
+<status status="PASS" endtime="20170119 12:59:06.484" starttime="20170119 12:59:06.483"></status>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<doc>Evaluates the given expression in Python and returns the results.</doc>
+<arguments>
+<arg>json.dumps(${patch_policy_dict})</arg>
+<arg>json</arg>
+</arguments>
+<assign>
+<var>${json_string}</var>
+</assign>
+<msg timestamp="20170119 12:59:06.485" level="INFO">${json_string} = {"name": "api-patch-policy-01", "schedule_time": "13:10", "schedule_days": 2, "organization_id": 1, "policy_type_name": "patch", "configuration": {"auto_patch": false, "auto_reboot": true}, "notes": "...</msg>
+<status status="PASS" endtime="20170119 12:59:06.486" starttime="20170119 12:59:06.484"></status>
+</kw>
+<kw name="Get Request" library="RequestsKeywords">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>automoxapi</arg>
+<arg>/policies</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20170119 12:59:06.808" level="INFO">Get Request using : alias=automoxapi, uri=/policies, headers=None </msg>
+<msg timestamp="20170119 12:59:06.809" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:06.809" starttime="20170119 12:59:06.486"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>200</arg>
+</arguments>
+<msg timestamp="20170119 12:59:06.810" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:06.810" starttime="20170119 12:59:06.809"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${resp.json()}</arg>
+</arguments>
+<assign>
+<var>@{resp_json}</var>
+</assign>
+<msg timestamp="20170119 12:59:06.811" level="INFO">@{resp_json} = [ {u'name': u'Patch Policy Foo', u'schedule_time': u'01:00', u'schedule_days': 254, u'organization_id': 1, u'create_time': u'2017-01-02 01:47:06.774433', u'notes': u'Notes blah', u'policy_type_name': ...</msg>
+<status status="PASS" endtime="20170119 12:59:06.811" starttime="20170119 12:59:06.810"></status>
+</kw>
+<kw name="Policy List Should Contain Policy Details" library="HelperKeywords">
+<arguments>
+<arg>${resp_json}</arg>
+<arg>${json_string}</arg>
+</arguments>
+<msg timestamp="20170119 12:59:06.811" level="INFO">Policy Details found in Policy List: {u'name': u'api-patch-policy-01', u'schedule_time': u'13:10', u'schedule_days': 2, u'organization_id': 1, u'create_time': u'2017-01-19 07:29:27.084995', u'notes': u'api-patch-policy-01', u'policy_type_name': u'patch', u'configuration': {u'auto_patch': False, u'auto_reboot': True}, u'id': 104}</msg>
+<status status="PASS" endtime="20170119 12:59:06.811" starttime="20170119 12:59:06.811"></status>
+</kw>
+<status status="PASS" endtime="20170119 12:59:06.811" starttime="20170119 12:59:06.481"></status>
+</kw>
+<doc>**Test Case**
+User should be able to create patch Policy
+1. Create a patch policy with valid inputs
+2. Verify whether patch policy is created successfully</doc>
+<tags>
+<tag>api_tests</tag>
+</tags>
+<status status="PASS" endtime="20170119 12:59:06.812" critical="yes" starttime="20170119 12:59:04.851"></status>
+</test>
+<test id="s1-s1-t2" name="AX.TC4 Create a new Policy Set">
+<kw name="Create Policy Set" library="api_keywords">
+<arguments>
+<arg>api-policy-set-01</arg>
+<arg>${1}</arg>
+<arg>this is api-policy-set-01</arg>
+<arg>@{EMPTY}</arg>
+</arguments>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>name=${name}</arg>
+<arg>organization_id=${organization_id}</arg>
+<arg>notes=${notes}</arg>
+<arg>policies=${policies}</arg>
+</arguments>
+<assign>
+<var>&amp;{policy_set_dict}</var>
+</assign>
+<msg timestamp="20170119 12:59:06.816" level="INFO">&amp;{policy_set_dict} = { name=api-policy-set-01 | organization_id=1 | notes=this is api-policy-set-01 | policies=[] }</msg>
+<status status="PASS" endtime="20170119 12:59:06.816" starttime="20170119 12:59:06.816"></status>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<doc>Evaluates the given expression in Python and returns the results.</doc>
+<arguments>
+<arg>json.dumps(${policy_set_dict})</arg>
+<arg>json</arg>
+</arguments>
+<assign>
+<var>${json_string}</var>
+</assign>
+<msg timestamp="20170119 12:59:06.818" level="INFO">${json_string} = {"organization_id": 1, "notes": "this is api-policy-set-01", "name": "api-policy-set-01", "policies": []}</msg>
+<status status="PASS" endtime="20170119 12:59:06.818" starttime="20170119 12:59:06.816"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>o=${organization_id}</arg>
+</arguments>
+<assign>
+<var>${params}</var>
+</assign>
+<msg timestamp="20170119 12:59:06.818" level="INFO">${params} = {u'o': 1}</msg>
+<status status="PASS" endtime="20170119 12:59:06.818" starttime="20170119 12:59:06.818"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${json_string}</arg>
+</arguments>
+<msg timestamp="20170119 12:59:06.819" level="INFO">{"organization_id": 1, "notes": "this is api-policy-set-01", "name": "api-policy-set-01", "policies": []}</msg>
+<status status="PASS" endtime="20170119 12:59:06.819" starttime="20170119 12:59:06.818"></status>
+</kw>
+<kw name="Post Request" library="RequestsKeywords">
+<doc>Send a POST request on the session object found using the</doc>
+<arguments>
+<arg>automoxapi</arg>
+<arg>/policysets</arg>
+<arg>data=${json_string}</arg>
+<arg>params=${params}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20170119 12:59:07.150" level="INFO">Post Request using : alias=automoxapi, uri=/policysets, data=&lt;empty&gt;, headers=None, files=None, allow_redirects=True </msg>
+<msg timestamp="20170119 12:59:07.150" level="INFO">${resp} = &lt;Response [201]&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:07.150" starttime="20170119 12:59:06.819"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${resp.content}</arg>
+</arguments>
+<msg timestamp="20170119 12:59:07.152" level="INFO">{}</msg>
+<status status="PASS" endtime="20170119 12:59:07.152" starttime="20170119 12:59:07.152"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>201</arg>
+</arguments>
+<msg timestamp="20170119 12:59:07.152" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:07.153" starttime="20170119 12:59:07.152"></status>
+</kw>
+<status status="PASS" endtime="20170119 12:59:07.153" starttime="20170119 12:59:06.815"></status>
+</kw>
+<kw name="Policy Set should be created successfully" library="api_keywords">
+<arguments>
+<arg>api-policy-set-01</arg>
+<arg>${1}</arg>
+<arg>this is api-policy-set-01</arg>
+<arg>@{EMPTY}</arg>
+</arguments>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>name=${name}</arg>
+<arg>organization_id=${organization_id}</arg>
+<arg>notes=${notes}</arg>
+<arg>policies=${policies}</arg>
+</arguments>
+<assign>
+<var>&amp;{policy_set_dict}</var>
+</assign>
+<msg timestamp="20170119 12:59:07.154" level="INFO">&amp;{policy_set_dict} = { name=api-policy-set-01 | organization_id=1 | notes=this is api-policy-set-01 | policies=[] }</msg>
+<status status="PASS" endtime="20170119 12:59:07.154" starttime="20170119 12:59:07.153"></status>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<doc>Evaluates the given expression in Python and returns the results.</doc>
+<arguments>
+<arg>json.dumps(${policy_set_dict})</arg>
+<arg>json</arg>
+</arguments>
+<assign>
+<var>${json_string}</var>
+</assign>
+<msg timestamp="20170119 12:59:07.155" level="INFO">${json_string} = {"organization_id": 1, "notes": "this is api-policy-set-01", "name": "api-policy-set-01", "policies": []}</msg>
+<status status="PASS" endtime="20170119 12:59:07.155" starttime="20170119 12:59:07.154"></status>
+</kw>
+<kw name="Get Request" library="RequestsKeywords">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>automoxapi</arg>
+<arg>/policysets</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20170119 12:59:07.498" level="INFO">Get Request using : alias=automoxapi, uri=/policysets, headers=None </msg>
+<msg timestamp="20170119 12:59:07.499" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:07.499" starttime="20170119 12:59:07.156"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>200</arg>
+</arguments>
+<msg timestamp="20170119 12:59:07.499" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:07.499" starttime="20170119 12:59:07.499"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${resp.json()}</arg>
+</arguments>
+<assign>
+<var>@{resp_json}</var>
+</assign>
+<msg timestamp="20170119 12:59:07.500" level="INFO">@{resp_json} = [ {u'name': u'PolicySet 2', u'notes': u'Some more notes', u'organization_id': 1, u'create_time': u'2017-01-02 01:47:06.796947', u'policies': [], u'id': 2} | {u'name': u'PolicySet 1', u'notes': u'Some ...</msg>
+<status status="PASS" endtime="20170119 12:59:07.500" starttime="20170119 12:59:07.499"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${resp_json}</arg>
+</arguments>
+<msg timestamp="20170119 12:59:07.500" level="INFO">[{u'name': u'PolicySet 2', u'notes': u'Some more notes', u'organization_id': 1, u'create_time': u'2017-01-02 01:47:06.796947', u'policies': [], u'id': 2}, {u'name': u'PolicySet 1', u'notes': u'Some notes', u'organization_id': 1, u'create_time': u'2017-01-02 01:47:06.793462', u'policies': [1, 12], u'id': 1}, {u'name': u'api-policy-set-01', u'notes': u'this is api-policy-set-01', u'organization_id': 1, u'create_time': u'2017-01-19 07:29:27.772683', u'policies': [], u'id': 42}]</msg>
+<status status="PASS" endtime="20170119 12:59:07.500" starttime="20170119 12:59:07.500"></status>
+</kw>
+<kw name="Policy Set List Should Contain Policy Set Details" library="HelperKeywords">
+<arguments>
+<arg>${resp_json}</arg>
+<arg>${json_string}</arg>
+</arguments>
+<msg timestamp="20170119 12:59:07.501" level="INFO">Policy Set Details found in Policy Set List: {u'name': u'api-policy-set-01', u'notes': u'this is api-policy-set-01', u'organization_id': 1, u'create_time': u'2017-01-19 07:29:27.772683', u'policies': [], u'id': 42}</msg>
+<status status="PASS" endtime="20170119 12:59:07.501" starttime="20170119 12:59:07.501"></status>
+</kw>
+<status status="PASS" endtime="20170119 12:59:07.501" starttime="20170119 12:59:07.153"></status>
+</kw>
+<doc>**Test Case**
+User should be able to create new policy set
+1. Create a new policy set with valid inputs
+2. Verify whether policy set is created successfully</doc>
+<tags>
+<tag>api_tests</tag>
+</tags>
+<status status="PASS" endtime="20170119 12:59:07.502" critical="yes" starttime="20170119 12:59:06.814"></status>
+</test>
+<test id="s1-s1-t3" name="AX.TC5 Create a new Group">
+<kw name="Create Group" library="api_keywords">
+<arguments>
+<arg>api-group-01</arg>
+<arg>${1}</arg>
+<arg>${1}</arg>
+<arg>api-policy-set-01</arg>
+<arg>600</arg>
+<arg>${true}</arg>
+</arguments>
+<kw name="Get Request" library="RequestsKeywords">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>automoxapi</arg>
+<arg>/policysets</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20170119 12:59:07.845" level="INFO">Get Request using : alias=automoxapi, uri=/policysets, headers=None </msg>
+<msg timestamp="20170119 12:59:07.846" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:07.846" starttime="20170119 12:59:07.506"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${resp.json()}</arg>
+</arguments>
+<assign>
+<var>@{resp_json}</var>
+</assign>
+<msg timestamp="20170119 12:59:07.846" level="INFO">@{resp_json} = [ {u'name': u'PolicySet 2', u'notes': u'Some more notes', u'organization_id': 1, u'create_time': u'2017-01-02 01:47:06.796947', u'policies': [], u'id': 2} | {u'name': u'PolicySet 1', u'notes': u'Some ...</msg>
+<status status="PASS" endtime="20170119 12:59:07.846" starttime="20170119 12:59:07.846"></status>
+</kw>
+<kw name="Get Policy Set Id" library="HelperKeywords">
+<arguments>
+<arg>${resp_json}</arg>
+<arg>${policy_set_name}</arg>
+</arguments>
+<assign>
+<var>${policy_set_id}</var>
+</assign>
+<msg timestamp="20170119 12:59:07.847" level="INFO">Policy Set ID for api-policy-set-01 is42</msg>
+<msg timestamp="20170119 12:59:07.847" level="INFO">${policy_set_id} = 42</msg>
+<status status="PASS" endtime="20170119 12:59:07.847" starttime="20170119 12:59:07.847"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${policy_set_id}</arg>
+</arguments>
+<msg timestamp="20170119 12:59:07.847" level="INFO">42</msg>
+<status status="PASS" endtime="20170119 12:59:07.847" starttime="20170119 12:59:07.847"></status>
+</kw>
+<kw name="Convert To Integer" library="BuiltIn">
+<doc>Converts the given item to an integer number.</doc>
+<arguments>
+<arg>${policy_set_id}</arg>
+</arguments>
+<assign>
+<var>${policy_set_id_int}</var>
+</assign>
+<msg timestamp="20170119 12:59:07.848" level="INFO">${policy_set_id_int} = 42</msg>
+<status status="PASS" endtime="20170119 12:59:07.848" starttime="20170119 12:59:07.848"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>name=${name}</arg>
+<arg>parent_server_group_id=${parent_server_group_id}</arg>
+<arg>policy_set_id=${policy_set_id}</arg>
+<arg>refresh_interval=${refresh_interval}</arg>
+<arg>override=${override}</arg>
+</arguments>
+<assign>
+<var>&amp;{group_dict}</var>
+</assign>
+<msg timestamp="20170119 12:59:07.849" level="INFO">&amp;{group_dict} = { name=api-group-01 | parent_server_group_id=1 | policy_set_id=42 | refresh_interval=600 | override=True }</msg>
+<status status="PASS" endtime="20170119 12:59:07.849" starttime="20170119 12:59:07.848"></status>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<doc>Evaluates the given expression in Python and returns the results.</doc>
+<arguments>
+<arg>json.dumps(${group_dict})</arg>
+<arg>json</arg>
+</arguments>
+<assign>
+<var>${json_string}</var>
+</assign>
+<msg timestamp="20170119 12:59:07.850" level="INFO">${json_string} = {"override": true, "policy_set_id": 42, "parent_server_group_id": 1, "name": "api-group-01", "refresh_interval": "600"}</msg>
+<status status="PASS" endtime="20170119 12:59:07.850" starttime="20170119 12:59:07.849"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>o=${organization_id}</arg>
+</arguments>
+<assign>
+<var>${params}</var>
+</assign>
+<msg timestamp="20170119 12:59:07.851" level="INFO">${params} = {u'o': 1}</msg>
+<status status="PASS" endtime="20170119 12:59:07.851" starttime="20170119 12:59:07.850"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${json_string}</arg>
+</arguments>
+<msg timestamp="20170119 12:59:07.851" level="INFO">{"override": true, "policy_set_id": 42, "parent_server_group_id": 1, "name": "api-group-01", "refresh_interval": "600"}</msg>
+<status status="PASS" endtime="20170119 12:59:07.851" starttime="20170119 12:59:07.851"></status>
+</kw>
+<kw name="Post Request" library="RequestsKeywords">
+<doc>Send a POST request on the session object found using the</doc>
+<arguments>
+<arg>automoxapi</arg>
+<arg>/servergroups</arg>
+<arg>data=${json_string}</arg>
+<arg>params=${params}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20170119 12:59:08.179" level="INFO">Post Request using : alias=automoxapi, uri=/servergroups, data=&lt;empty&gt;, headers=None, files=None, allow_redirects=True </msg>
+<msg timestamp="20170119 12:59:08.179" level="INFO">${resp} = &lt;Response [201]&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:08.179" starttime="20170119 12:59:07.851"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${resp.content}</arg>
+</arguments>
+<msg timestamp="20170119 12:59:08.179" level="INFO">{}</msg>
+<status status="PASS" endtime="20170119 12:59:08.179" starttime="20170119 12:59:08.179"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>201</arg>
+</arguments>
+<msg timestamp="20170119 12:59:08.180" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:08.180" starttime="20170119 12:59:08.180"></status>
+</kw>
+<status status="PASS" endtime="20170119 12:59:08.180" starttime="20170119 12:59:07.505"></status>
+</kw>
+<kw name="Group should be created successfully" library="api_keywords">
+<arguments>
+<arg>api-group-01</arg>
+<arg>${1}</arg>
+<arg>${1}</arg>
+<arg>api-policy-set-01</arg>
+<arg>${600}</arg>
+<arg>${true}</arg>
+</arguments>
+<kw name="Get Request" library="RequestsKeywords">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>automoxapi</arg>
+<arg>/policysets</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20170119 12:59:08.511" level="INFO">Get Request using : alias=automoxapi, uri=/policysets, headers=None </msg>
+<msg timestamp="20170119 12:59:08.511" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:08.512" starttime="20170119 12:59:08.182"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${resp.json()}</arg>
+</arguments>
+<assign>
+<var>@{resp_json}</var>
+</assign>
+<msg timestamp="20170119 12:59:08.512" level="INFO">@{resp_json} = [ {u'name': u'PolicySet 2', u'notes': u'Some more notes', u'organization_id': 1, u'create_time': u'2017-01-02 01:47:06.796947', u'policies': [], u'id': 2} | {u'name': u'PolicySet 1', u'notes': u'Some ...</msg>
+<status status="PASS" endtime="20170119 12:59:08.512" starttime="20170119 12:59:08.512"></status>
+</kw>
+<kw name="Get Policy Set Id" library="HelperKeywords">
+<arguments>
+<arg>${resp_json}</arg>
+<arg>${policy_set_name}</arg>
+</arguments>
+<assign>
+<var>${policy_set_id}</var>
+</assign>
+<msg timestamp="20170119 12:59:08.513" level="INFO">Policy Set ID for api-policy-set-01 is42</msg>
+<msg timestamp="20170119 12:59:08.513" level="INFO">${policy_set_id} = 42</msg>
+<status status="PASS" endtime="20170119 12:59:08.513" starttime="20170119 12:59:08.513"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${policy_set_id}</arg>
+</arguments>
+<msg timestamp="20170119 12:59:08.513" level="INFO">42</msg>
+<status status="PASS" endtime="20170119 12:59:08.513" starttime="20170119 12:59:08.513"></status>
+</kw>
+<kw name="Convert To Integer" library="BuiltIn">
+<doc>Converts the given item to an integer number.</doc>
+<arguments>
+<arg>${policy_set_id}</arg>
+</arguments>
+<assign>
+<var>${policy_set_id_int}</var>
+</assign>
+<msg timestamp="20170119 12:59:08.514" level="INFO">${policy_set_id_int} = 42</msg>
+<status status="PASS" endtime="20170119 12:59:08.514" starttime="20170119 12:59:08.514"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>name=${name}</arg>
+<arg>parent_server_group_id=${parent_server_group_id}</arg>
+<arg>policy_set_id=${policy_set_id_int}</arg>
+<arg>refresh_interval=${refresh_interval}</arg>
+<arg>override=${override}</arg>
+</arguments>
+<assign>
+<var>&amp;{group_dict}</var>
+</assign>
+<msg timestamp="20170119 12:59:08.515" level="INFO">&amp;{group_dict} = { name=api-group-01 | parent_server_group_id=1 | policy_set_id=42 | refresh_interval=600 | override=True }</msg>
+<status status="PASS" endtime="20170119 12:59:08.515" starttime="20170119 12:59:08.514"></status>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<doc>Evaluates the given expression in Python and returns the results.</doc>
+<arguments>
+<arg>json.dumps(${group_dict})</arg>
+<arg>json</arg>
+</arguments>
+<assign>
+<var>${json_string}</var>
+</assign>
+<msg timestamp="20170119 12:59:08.516" level="INFO">${json_string} = {"override": true, "policy_set_id": 42, "parent_server_group_id": 1, "name": "api-group-01", "refresh_interval": 600}</msg>
+<status status="PASS" endtime="20170119 12:59:08.516" starttime="20170119 12:59:08.515"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${json_string}</arg>
+</arguments>
+<msg timestamp="20170119 12:59:08.517" level="INFO">{"override": true, "policy_set_id": 42, "parent_server_group_id": 1, "name": "api-group-01", "refresh_interval": 600}</msg>
+<status status="PASS" endtime="20170119 12:59:08.517" starttime="20170119 12:59:08.516"></status>
+</kw>
+<kw name="Get Request" library="RequestsKeywords">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>automoxapi</arg>
+<arg>/servergroups</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20170119 12:59:08.836" level="INFO">Get Request using : alias=automoxapi, uri=/servergroups, headers=None </msg>
+<msg timestamp="20170119 12:59:08.837" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:08.837" starttime="20170119 12:59:08.517"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>200</arg>
+</arguments>
+<msg timestamp="20170119 12:59:08.837" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:08.837" starttime="20170119 12:59:08.837"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${resp.json()}</arg>
+</arguments>
+<assign>
+<var>@{resp_json}</var>
+</assign>
+<msg timestamp="20170119 12:59:08.838" level="INFO">@{resp_json} = [ {u'name': u'', u'policy_set_id': 1, u'parent_server_group_id': 1, u'override': True, u'id': 1, u'refresh_interval': 1440} | {u'name': u'api-group-01', u'policy_set_id': 42, u'parent_server_group_id'...</msg>
+<status status="PASS" endtime="20170119 12:59:08.838" starttime="20170119 12:59:08.838"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${resp_json}</arg>
+</arguments>
+<msg timestamp="20170119 12:59:08.838" level="INFO">[{u'name': u'', u'policy_set_id': 1, u'parent_server_group_id': 1, u'override': True, u'id': 1, u'refresh_interval': 1440}, {u'name': u'api-group-01', u'policy_set_id': 42, u'parent_server_group_id': 1, u'override': True, u'id': 38, u'refresh_interval': 600}]</msg>
+<status status="PASS" endtime="20170119 12:59:08.838" starttime="20170119 12:59:08.838"></status>
+</kw>
+<kw name="Group List Should Contain Group Details" library="HelperKeywords">
+<arguments>
+<arg>${resp_json}</arg>
+<arg>${json_string}</arg>
+</arguments>
+<msg timestamp="20170119 12:59:08.839" level="INFO">Group Details found in Group List: {u'name': u'api-group-01', u'policy_set_id': 42, u'parent_server_group_id': 1, u'override': True, u'id': 38, u'refresh_interval': 600}</msg>
+<status status="PASS" endtime="20170119 12:59:08.839" starttime="20170119 12:59:08.839"></status>
+</kw>
+<status status="PASS" endtime="20170119 12:59:08.839" starttime="20170119 12:59:08.181"></status>
+</kw>
+<doc>**Test Case**
+User should be able to create new group
+1. Create a new group with valid inputs
+2. Verify whether group is created successfully</doc>
+<tags>
+<tag>api_tests</tag>
+</tags>
+<status status="PASS" endtime="20170119 12:59:08.840" critical="yes" starttime="20170119 12:59:07.505"></status>
+</test>
+<test id="s1-s1-t4" name="AX.TC6 Assign Endpoints to a Group">
+<kw name="Assign Endpoint to Group" library="api_keywords">
+<arguments>
+<arg>test</arg>
+<arg>api-group-01</arg>
+<arg>${1}</arg>
+</arguments>
+<kw name="Get Request" library="RequestsKeywords">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>automoxapi</arg>
+<arg>/servers</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20170119 12:59:14.555" level="INFO">Get Request using : alias=automoxapi, uri=/servers, headers=None </msg>
+<msg timestamp="20170119 12:59:14.556" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:14.556" starttime="20170119 12:59:08.844"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${resp.json()}</arg>
+</arguments>
+<assign>
+<var>@{resp_json}</var>
+</assign>
+<msg timestamp="20170119 12:59:14.568" level="INFO">@{resp_json} = [ {u'os_version_id': 67, u'last_update_time': None, u'create_time': u'2017-01-03 04:12:55.501582', u'needs_reboot': False, u'timezone': u'UTC+00', u'id': 28, u'uptime': 92848, u'patches': 12, u'detail...</msg>
+<status status="PASS" endtime="20170119 12:59:14.568" starttime="20170119 12:59:14.556"></status>
+</kw>
+<kw name="Get Endpoint Id" library="HelperKeywords">
+<arguments>
+<arg>${resp_json}</arg>
+<arg>${endpoint_name}</arg>
+</arguments>
+<assign>
+<var>${endpoint_id}</var>
+</assign>
+<msg timestamp="20170119 12:59:14.569" level="INFO">Endpoint ID for test is4</msg>
+<msg timestamp="20170119 12:59:14.569" level="INFO">${endpoint_id} = 4</msg>
+<status status="PASS" endtime="20170119 12:59:14.569" starttime="20170119 12:59:14.568"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${endpoint_id}</arg>
+</arguments>
+<msg timestamp="20170119 12:59:14.569" level="INFO">4</msg>
+<status status="PASS" endtime="20170119 12:59:14.569" starttime="20170119 12:59:14.569"></status>
+</kw>
+<kw name="Convert To Integer" library="BuiltIn">
+<doc>Converts the given item to an integer number.</doc>
+<arguments>
+<arg>${endpoint_id}</arg>
+</arguments>
+<assign>
+<var>${endpoint_id_int}</var>
+</assign>
+<msg timestamp="20170119 12:59:14.570" level="INFO">${endpoint_id_int} = 4</msg>
+<status status="PASS" endtime="20170119 12:59:14.570" starttime="20170119 12:59:14.570"></status>
+</kw>
+<kw name="Get Endpoint Json" library="HelperKeywords">
+<arguments>
+<arg>${resp_json}</arg>
+<arg>${endpoint_id_int}</arg>
+</arguments>
+<assign>
+<var>${endpoint_json}</var>
+</assign>
+<msg timestamp="20170119 12:59:14.570" level="INFO">Endpoint Json for 4 is{u'os_version_id': 66, u'last_update_time': None, u'create_time': u'2017-01-02 19:10:27.40026', u'needs_reboot': False, u'timezone': u'UTC+00', u'id': 4, u'uptime': 60249, u'patches': 1, u'detail': {u'SERVICETAG': u'', u'DISKS': [{u'TYPE': u'', u'SIZE': u'32212254720'}], u'VENDOR': u'Xen', u'NICS': [{u'VENDOR': u'', u'IPS': [], u'MAC': u'02:42:ac:11:00:04', u'CONNECTED': True, u'DEVICE': u'eth0', u'TYPE': u'enet'}], u'RAM': u'4147056640', u'CPU': u'Intel(R) Xeon(R) CPU E5-2670 v2 @ 2.50GHz', u'VERSION': u'4.2.amazon', u'MODEL': u'HVM domU', u'SERIAL': u'ec243685-efea-4817-285e-bd4348bf525a'}, u'server_group_id': 1, u'os_version': u'7.3', u'ip_addrs': [u'1.2.3.4'], u'last_refresh_time': u'2017-01-03T03:09:32+0000', u'os_name': u'CentOS', u'tags': [u'foo', u'bar'], u'deleted': False, u'policy_status': [{u'status': 2, u'policy_set_id': 1, u'policy_name': u'Patch Policy Foo', u'result': u'{}', u'policy_type_name': u'patch', u'policy_id': 1}], u'organization_id': 1, u'os_family': u'Linux', u'refresh_interval': None, u'name': u'test', u'uuid': u'608a8f9d-20ac-4644-872f-90466f7a6348', u'instance_id': u'i-b584fc7c', u'last_checkin_time': u'2017-01-02T19:10:47+0000'}</msg>
+<msg timestamp="20170119 12:59:14.571" level="INFO">${endpoint_json} = {u'os_version_id': 66, u'last_update_time': None, u'create_time': u'2017-01-02 19:10:27.40026', u'needs_reboot': False, u'timezone': u'UTC+00', u'id': 4, u'uptime': 60249, u'patches': 1, u'detail': {u...</msg>
+<status status="PASS" endtime="20170119 12:59:14.571" starttime="20170119 12:59:14.570"></status>
+</kw>
+<kw name="Get Request" library="RequestsKeywords">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>automoxapi</arg>
+<arg>/servergroups</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20170119 12:59:14.902" level="INFO">Get Request using : alias=automoxapi, uri=/servergroups, headers=None </msg>
+<msg timestamp="20170119 12:59:14.902" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:14.902" starttime="20170119 12:59:14.571"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${resp.json()}</arg>
+</arguments>
+<assign>
+<var>@{resp_json}</var>
+</assign>
+<msg timestamp="20170119 12:59:14.903" level="INFO">@{resp_json} = [ {u'name': u'', u'policy_set_id': 1, u'parent_server_group_id': 1, u'override': True, u'id': 1, u'refresh_interval': 1440} | {u'name': u'api-group-01', u'policy_set_id': 42, u'parent_server_group_id'...</msg>
+<status status="PASS" endtime="20170119 12:59:14.903" starttime="20170119 12:59:14.902"></status>
+</kw>
+<kw name="Get Group Id" library="HelperKeywords">
+<arguments>
+<arg>${resp_json}</arg>
+<arg>${group_name}</arg>
+</arguments>
+<assign>
+<var>${group_id}</var>
+</assign>
+<msg timestamp="20170119 12:59:14.904" level="INFO">Group ID for api-group-01 is38</msg>
+<msg timestamp="20170119 12:59:14.904" level="INFO">${group_id} = 38</msg>
+<status status="PASS" endtime="20170119 12:59:14.904" starttime="20170119 12:59:14.903"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${group_id}</arg>
+</arguments>
+<msg timestamp="20170119 12:59:14.904" level="INFO">38</msg>
+<status status="PASS" endtime="20170119 12:59:14.904" starttime="20170119 12:59:14.904"></status>
+</kw>
+<kw name="Convert To Integer" library="BuiltIn">
+<doc>Converts the given item to an integer number.</doc>
+<arguments>
+<arg>${group_id}</arg>
+</arguments>
+<assign>
+<var>${group_id_int}</var>
+</assign>
+<msg timestamp="20170119 12:59:14.905" level="INFO">${group_id_int} = 38</msg>
+<status status="PASS" endtime="20170119 12:59:14.905" starttime="20170119 12:59:14.904"></status>
+</kw>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${endpoint_json}</arg>
+<arg>server_group_id</arg>
+<arg>${group_id_int}</arg>
+</arguments>
+<status status="PASS" endtime="20170119 12:59:14.905" starttime="20170119 12:59:14.905"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${endpoint_json}</arg>
+</arguments>
+<msg timestamp="20170119 12:59:14.906" level="INFO">{u'os_version_id': 66, u'last_update_time': None, u'create_time': u'2017-01-02 19:10:27.40026', u'needs_reboot': False, u'timezone': u'UTC+00', u'id': 4, u'uptime': 60249, u'patches': 1, u'detail': {u'SERVICETAG': u'', u'DISKS': [{u'TYPE': u'', u'SIZE': u'32212254720'}], u'VENDOR': u'Xen', u'NICS': [{u'VENDOR': u'', u'IPS': [], u'MAC': u'02:42:ac:11:00:04', u'CONNECTED': True, u'DEVICE': u'eth0', u'TYPE': u'enet'}], u'RAM': u'4147056640', u'CPU': u'Intel(R) Xeon(R) CPU E5-2670 v2 @ 2.50GHz', u'VERSION': u'4.2.amazon', u'MODEL': u'HVM domU', u'SERIAL': u'ec243685-efea-4817-285e-bd4348bf525a'}, u'server_group_id': 38, u'os_version': u'7.3', u'ip_addrs': [u'1.2.3.4'], u'last_refresh_time': u'2017-01-03T03:09:32+0000', u'os_name': u'CentOS', u'tags': [u'foo', u'bar'], u'deleted': False, u'policy_status': [{u'status': 2, u'policy_set_id': 1, u'policy_name': u'Patch Policy Foo', u'result': u'{}', u'policy_type_name': u'patch', u'policy_id': 1}], u'organization_id': 1, u'os_family': u'Linux', u'refresh_interval': None, u'name': u'test', u'uuid': u'608a8f9d-20ac-4644-872f-90466f7a6348', u'instance_id': u'i-b584fc7c', u'last_checkin_time': u'2017-01-02T19:10:47+0000'}</msg>
+<status status="PASS" endtime="20170119 12:59:14.906" starttime="20170119 12:59:14.905"></status>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<doc>Evaluates the given expression in Python and returns the results.</doc>
+<arguments>
+<arg>json.dumps(${endpoint_json})</arg>
+<arg>json</arg>
+</arguments>
+<assign>
+<var>${endpoint_json_string}</var>
+</assign>
+<msg timestamp="20170119 12:59:14.908" level="INFO">${endpoint_json_string} = {"os_version_id": 66, "last_update_time": null, "create_time": "2017-01-02 19:10:27.40026", "needs_reboot": false, "timezone": "UTC+00", "id": 4, "uptime": 60249, "patches": 1, "detail": {"SERVICETAG"...</msg>
+<status status="PASS" endtime="20170119 12:59:14.908" starttime="20170119 12:59:14.906"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>o=${organization_id}</arg>
+</arguments>
+<assign>
+<var>${params}</var>
+</assign>
+<msg timestamp="20170119 12:59:14.909" level="INFO">${params} = {u'o': 1}</msg>
+<status status="PASS" endtime="20170119 12:59:14.909" starttime="20170119 12:59:14.908"></status>
+</kw>
+<kw name="Put Request" library="RequestsKeywords">
+<doc>Send a PUT request on the session object found using the</doc>
+<arguments>
+<arg>automoxapi</arg>
+<arg>/servers/${endpoint_id_int}</arg>
+<arg>data=${endpoint_json_string}</arg>
+<arg>params=${params}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20170119 12:59:15.238" level="INFO">Put Request using : alias=automoxapi, uri=/servers/4, data={"os_version_id": 66, "last_update_time": null, "create_time": "2017-01-02 19:10:27.40026", "needs_reboot": false, "timezone": "UTC+00", "id": 4, "uptime": 60249, "patches": 1, "detail": {"SERVICETAG": "", "VERSION": "4.2.amazon", "RAM": "4147056640", "VENDOR": "Xen", "SERIAL": "ec243685-efea-4817-285e-bd4348bf525a", "NICS": [{"VENDOR": "", "IPS": [], "MAC": "02:42:ac:11:00:04", "CONNECTED": true, "DEVICE": "eth0", "TYPE": "enet"}], "MODEL": "HVM domU", "DISKS": [{"TYPE": "", "SIZE": "32212254720"}], "CPU": "Intel(R) Xeon(R) CPU E5-2670 v2 @ 2.50GHz"}, "server_group_id": 38, "os_version": "7.3", "ip_addrs": ["1.2.3.4"], "refresh_interval": null, "last_refresh_time": "2017-01-03T03:09:32+0000", "os_name": "CentOS", "tags": ["foo", "bar"], "deleted": false, "policy_status": [{"status": 2, "policy_set_id": 1, "policy_name": "Patch Policy Foo", "result": "{}", "policy_type_name": "patch", "policy_id": 1}], "organization_id": 1, "os_family": "Linux", "uuid": "608a8f9d-20ac-4644-872f-90466f7a6348", "name": "test", "instance_id": "i-b584fc7c", "last_checkin_time": "2017-01-02T19:10:47+0000"},                     headers=None, allow_redirects=True </msg>
+<msg timestamp="20170119 12:59:15.239" level="INFO">${resp} = &lt;Response [204]&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:15.239" starttime="20170119 12:59:14.909"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${resp.content}</arg>
+</arguments>
+<msg timestamp="20170119 12:59:15.239" level="INFO"></msg>
+<status status="PASS" endtime="20170119 12:59:15.239" starttime="20170119 12:59:15.239"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>204</arg>
+</arguments>
+<msg timestamp="20170119 12:59:15.240" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:15.240" starttime="20170119 12:59:15.240"></status>
+</kw>
+<status status="PASS" endtime="20170119 12:59:15.240" starttime="20170119 12:59:08.843"></status>
+</kw>
+<kw name="Endpoint Should be assigned to Group successfully" library="api_keywords">
+<arguments>
+<arg>test</arg>
+<arg>api-group-01</arg>
+<arg>${1}</arg>
+</arguments>
+<kw name="Get Request" library="RequestsKeywords">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>automoxapi</arg>
+<arg>/servers</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20170119 12:59:20.947" level="INFO">Get Request using : alias=automoxapi, uri=/servers, headers=None </msg>
+<msg timestamp="20170119 12:59:20.948" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:20.948" starttime="20170119 12:59:15.241"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${resp.json()}</arg>
+</arguments>
+<assign>
+<var>@{resp_json}</var>
+</assign>
+<msg timestamp="20170119 12:59:20.961" level="INFO">@{resp_json} = [ {u'os_version_id': 67, u'last_update_time': None, u'create_time': u'2017-01-03 04:12:55.501582', u'needs_reboot': False, u'timezone': u'UTC+00', u'id': 28, u'uptime': 92848, u'patches': 12, u'detail...</msg>
+<status status="PASS" endtime="20170119 12:59:20.961" starttime="20170119 12:59:20.948"></status>
+</kw>
+<kw name="Get Endpoint Id" library="HelperKeywords">
+<arguments>
+<arg>${resp_json}</arg>
+<arg>${endpoint_name}</arg>
+</arguments>
+<assign>
+<var>${endpoint_id}</var>
+</assign>
+<msg timestamp="20170119 12:59:20.961" level="INFO">Endpoint ID for test is4</msg>
+<msg timestamp="20170119 12:59:20.961" level="INFO">${endpoint_id} = 4</msg>
+<status status="PASS" endtime="20170119 12:59:20.961" starttime="20170119 12:59:20.961"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${endpoint_id}</arg>
+</arguments>
+<msg timestamp="20170119 12:59:20.962" level="INFO">4</msg>
+<status status="PASS" endtime="20170119 12:59:20.962" starttime="20170119 12:59:20.962"></status>
+</kw>
+<kw name="Convert To Integer" library="BuiltIn">
+<doc>Converts the given item to an integer number.</doc>
+<arguments>
+<arg>${endpoint_id}</arg>
+</arguments>
+<assign>
+<var>${endpoint_id_int}</var>
+</assign>
+<msg timestamp="20170119 12:59:20.962" level="INFO">${endpoint_id_int} = 4</msg>
+<status status="PASS" endtime="20170119 12:59:20.962" starttime="20170119 12:59:20.962"></status>
+</kw>
+<kw name="Get Endpoint Json" library="HelperKeywords">
+<arguments>
+<arg>${resp_json}</arg>
+<arg>${endpoint_id_int}</arg>
+</arguments>
+<assign>
+<var>${endpoint_json}</var>
+</assign>
+<msg timestamp="20170119 12:59:20.963" level="INFO">Endpoint Json for 4 is{u'os_version_id': 66, u'last_update_time': None, u'create_time': u'2017-01-02 19:10:27.40026', u'needs_reboot': False, u'timezone': u'UTC+00', u'id': 4, u'uptime': 60249, u'patches': 1, u'detail': {u'SERVICETAG': u'', u'DISKS': [{u'TYPE': u'', u'SIZE': u'32212254720'}], u'VENDOR': u'Xen', u'NICS': [{u'VENDOR': u'', u'IPS': [], u'MAC': u'02:42:ac:11:00:04', u'CONNECTED': True, u'DEVICE': u'eth0', u'TYPE': u'enet'}], u'RAM': u'4147056640', u'CPU': u'Intel(R) Xeon(R) CPU E5-2670 v2 @ 2.50GHz', u'VERSION': u'4.2.amazon', u'MODEL': u'HVM domU', u'SERIAL': u'ec243685-efea-4817-285e-bd4348bf525a'}, u'server_group_id': 38, u'os_version': u'7.3', u'ip_addrs': [u'1.2.3.4'], u'last_refresh_time': u'2017-01-03T03:09:32+0000', u'os_name': u'CentOS', u'tags': [u'foo', u'bar'], u'deleted': False, u'policy_status': [], u'organization_id': 1, u'os_family': u'Linux', u'refresh_interval': None, u'name': u'test', u'uuid': u'608a8f9d-20ac-4644-872f-90466f7a6348', u'instance_id': u'i-b584fc7c', u'last_checkin_time': u'2017-01-02T19:10:47+0000'}</msg>
+<msg timestamp="20170119 12:59:20.963" level="INFO">${endpoint_json} = {u'os_version_id': 66, u'last_update_time': None, u'create_time': u'2017-01-02 19:10:27.40026', u'needs_reboot': False, u'timezone': u'UTC+00', u'id': 4, u'uptime': 60249, u'patches': 1, u'detail': {u...</msg>
+<status status="PASS" endtime="20170119 12:59:20.963" starttime="20170119 12:59:20.963"></status>
+</kw>
+<kw name="Get Request" library="RequestsKeywords">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>automoxapi</arg>
+<arg>/servergroups</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20170119 12:59:21.296" level="INFO">Get Request using : alias=automoxapi, uri=/servergroups, headers=None </msg>
+<msg timestamp="20170119 12:59:21.296" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:21.296" starttime="20170119 12:59:20.963"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${resp.json()}</arg>
+</arguments>
+<assign>
+<var>@{resp_json}</var>
+</assign>
+<msg timestamp="20170119 12:59:21.297" level="INFO">@{resp_json} = [ {u'name': u'', u'policy_set_id': 1, u'parent_server_group_id': 1, u'override': True, u'id': 1, u'refresh_interval': 1440} | {u'name': u'api-group-01', u'policy_set_id': 42, u'parent_server_group_id'...</msg>
+<status status="PASS" endtime="20170119 12:59:21.297" starttime="20170119 12:59:21.296"></status>
+</kw>
+<kw name="Get Group Id" library="HelperKeywords">
+<arguments>
+<arg>${resp_json}</arg>
+<arg>${group_name}</arg>
+</arguments>
+<assign>
+<var>${group_id}</var>
+</assign>
+<msg timestamp="20170119 12:59:21.298" level="INFO">Group ID for api-group-01 is38</msg>
+<msg timestamp="20170119 12:59:21.298" level="INFO">${group_id} = 38</msg>
+<status status="PASS" endtime="20170119 12:59:21.298" starttime="20170119 12:59:21.298"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${group_id}</arg>
+</arguments>
+<msg timestamp="20170119 12:59:21.298" level="INFO">38</msg>
+<status status="PASS" endtime="20170119 12:59:21.298" starttime="20170119 12:59:21.298"></status>
+</kw>
+<kw name="Convert To Integer" library="BuiltIn">
+<doc>Converts the given item to an integer number.</doc>
+<arguments>
+<arg>${group_id}</arg>
+</arguments>
+<assign>
+<var>${group_id_int}</var>
+</assign>
+<msg timestamp="20170119 12:59:21.299" level="INFO">${group_id_int} = 38</msg>
+<status status="PASS" endtime="20170119 12:59:21.299" starttime="20170119 12:59:21.298"></status>
+</kw>
+<kw name="Dictionary Should Contain Item" library="Collections">
+<doc>An item of ``key``/``value`` must be found in a `dictionary`.</doc>
+<arguments>
+<arg>${endpoint_json}</arg>
+<arg>server_group_id</arg>
+<arg>${group_id_int}</arg>
+<arg>Endpoint is not assigned to Group</arg>
+</arguments>
+<status status="PASS" endtime="20170119 12:59:21.299" starttime="20170119 12:59:21.299"></status>
+</kw>
+<status status="PASS" endtime="20170119 12:59:21.299" starttime="20170119 12:59:15.241"></status>
+</kw>
+<doc>**Test Case**
+User should be able to assign endpoints to a group
+1. Assign endpoint to a group
+2. Verify whether endpoint is assigned to the group</doc>
+<tags>
+<tag>api_tests</tag>
+</tags>
+<status status="PASS" endtime="20170119 12:59:21.300" critical="yes" starttime="20170119 12:59:08.843"></status>
+</test>
+<test id="s1-s1-t5" name="AX.TC7 Create a Software Deployment Policy">
+<kw name="Create Software Deployment Policy" library="api_keywords">
+<arguments>
+<arg>api-sw-deployment-policy-01</arg>
+<arg>${1}</arg>
+<arg>Linux</arg>
+<arg>ftp</arg>
+<arg>dnf install ftp</arg>
+<arg>${254}</arg>
+<arg>14:10</arg>
+<arg>This is api-sw-deployment-policy-01</arg>
+</arguments>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>os_family=${os_family}</arg>
+<arg>package_name=${package_name}</arg>
+<arg>installation_code=${installation_code}</arg>
+</arguments>
+<assign>
+<var>&amp;{configuration_dict}</var>
+</assign>
+<msg timestamp="20170119 12:59:21.305" level="INFO">&amp;{configuration_dict} = { os_family=Linux | package_name=ftp | installation_code=dnf install ftp }</msg>
+<status status="PASS" endtime="20170119 12:59:21.305" starttime="20170119 12:59:21.304"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>name=${name}</arg>
+<arg>policy_type_name=required_software</arg>
+<arg>organization_id=${organization_id}</arg>
+<arg>configuration=${configuration_dict}</arg>
+<arg>schedule_days=${schedule_days}</arg>
+<arg>schedule_time=${schedule_time}</arg>
+<arg>notes=${notes}</arg>
+</arguments>
+<assign>
+<var>&amp;{sw_deployment_policy_dict}</var>
+</assign>
+<msg timestamp="20170119 12:59:21.306" level="INFO">&amp;{sw_deployment_policy_dict} = { name=api-sw-deployment-policy-01 | policy_type_name=required_software | organization_id=1 | configuration={u'os_family': u'Linux', u'package_name': u'ftp', u'installation_code': u'dnf install ftp'} ...</msg>
+<status status="PASS" endtime="20170119 12:59:21.306" starttime="20170119 12:59:21.305"></status>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<doc>Evaluates the given expression in Python and returns the results.</doc>
+<arguments>
+<arg>json.dumps(${sw_deployment_policy_dict})</arg>
+<arg>json</arg>
+</arguments>
+<assign>
+<var>${json_string}</var>
+</assign>
+<msg timestamp="20170119 12:59:21.307" level="INFO">${json_string} = {"name": "api-sw-deployment-policy-01", "schedule_time": "14:10", "schedule_days": 254, "organization_id": 1, "policy_type_name": "required_software", "configuration": {"os_family": "Linux", "installa...</msg>
+<status status="PASS" endtime="20170119 12:59:21.307" starttime="20170119 12:59:21.306"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>o=${organization_id}</arg>
+</arguments>
+<assign>
+<var>${params}</var>
+</assign>
+<msg timestamp="20170119 12:59:21.308" level="INFO">${params} = {u'o': 1}</msg>
+<status status="PASS" endtime="20170119 12:59:21.308" starttime="20170119 12:59:21.307"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${json_string}</arg>
+</arguments>
+<msg timestamp="20170119 12:59:21.308" level="INFO">{"name": "api-sw-deployment-policy-01", "schedule_time": "14:10", "schedule_days": 254, "organization_id": 1, "policy_type_name": "required_software", "configuration": {"os_family": "Linux", "installation_code": "dnf install ftp", "package_name": "ftp"}, "notes": "This is api-sw-deployment-policy-01"}</msg>
+<status status="PASS" endtime="20170119 12:59:21.308" starttime="20170119 12:59:21.308"></status>
+</kw>
+<kw name="Post Request" library="RequestsKeywords">
+<doc>Send a POST request on the session object found using the</doc>
+<arguments>
+<arg>automoxapi</arg>
+<arg>/policies</arg>
+<arg>data=${json_string}</arg>
+<arg>params=${params}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20170119 12:59:21.643" level="INFO">Post Request using : alias=automoxapi, uri=/policies, data=&lt;empty&gt;, headers=None, files=None, allow_redirects=True </msg>
+<msg timestamp="20170119 12:59:21.644" level="INFO">${resp} = &lt;Response [201]&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:21.644" starttime="20170119 12:59:21.308"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${resp.content}</arg>
+</arguments>
+<msg timestamp="20170119 12:59:21.645" level="INFO">{}</msg>
+<status status="PASS" endtime="20170119 12:59:21.645" starttime="20170119 12:59:21.644"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>201</arg>
+</arguments>
+<msg timestamp="20170119 12:59:21.645" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:21.645" starttime="20170119 12:59:21.645"></status>
+</kw>
+<status status="PASS" endtime="20170119 12:59:21.645" starttime="20170119 12:59:21.303"></status>
+</kw>
+<kw name="Software Deployment Policy should be created successfully" library="api_keywords">
+<arguments>
+<arg>api-sw-deployment-policy-01</arg>
+<arg>${1}</arg>
+<arg>Linux</arg>
+<arg>ftp</arg>
+<arg>dnf install ftp</arg>
+<arg>${254}</arg>
+<arg>14:10</arg>
+<arg>This is api-sw-deployment-policy-01</arg>
+</arguments>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>os_family=${os_family}</arg>
+<arg>package_name=${package_name}</arg>
+<arg>installation_code=${installation_code}</arg>
+</arguments>
+<assign>
+<var>&amp;{configuration_dict}</var>
+</assign>
+<msg timestamp="20170119 12:59:21.647" level="INFO">&amp;{configuration_dict} = { os_family=Linux | package_name=ftp | installation_code=dnf install ftp }</msg>
+<status status="PASS" endtime="20170119 12:59:21.647" starttime="20170119 12:59:21.647"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>name=${name}</arg>
+<arg>policy_type_name=required_software</arg>
+<arg>organization_id=${organization_id}</arg>
+<arg>configuration=${configuration_dict}</arg>
+<arg>schedule_days=${schedule_days}</arg>
+<arg>schedule_time=${schedule_time}</arg>
+<arg>notes=${notes}</arg>
+</arguments>
+<assign>
+<var>&amp;{sw_deployment_policy_dict}</var>
+</assign>
+<msg timestamp="20170119 12:59:21.648" level="INFO">&amp;{sw_deployment_policy_dict} = { name=api-sw-deployment-policy-01 | policy_type_name=required_software | organization_id=1 | configuration={u'os_family': u'Linux', u'package_name': u'ftp', u'installation_code': u'dnf install ftp'} ...</msg>
+<status status="PASS" endtime="20170119 12:59:21.648" starttime="20170119 12:59:21.647"></status>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<doc>Evaluates the given expression in Python and returns the results.</doc>
+<arguments>
+<arg>json.dumps(${sw_deployment_policy_dict})</arg>
+<arg>json</arg>
+</arguments>
+<assign>
+<var>${json_string}</var>
+</assign>
+<msg timestamp="20170119 12:59:21.650" level="INFO">${json_string} = {"name": "api-sw-deployment-policy-01", "schedule_time": "14:10", "schedule_days": 254, "organization_id": 1, "policy_type_name": "required_software", "configuration": {"os_family": "Linux", "installa...</msg>
+<status status="PASS" endtime="20170119 12:59:21.650" starttime="20170119 12:59:21.648"></status>
+</kw>
+<kw name="Get Request" library="RequestsKeywords">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>automoxapi</arg>
+<arg>/policies</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20170119 12:59:21.979" level="INFO">Get Request using : alias=automoxapi, uri=/policies, headers=None </msg>
+<msg timestamp="20170119 12:59:21.979" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:21.979" starttime="20170119 12:59:21.650"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>200</arg>
+</arguments>
+<msg timestamp="20170119 12:59:21.980" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:21.980" starttime="20170119 12:59:21.980"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${resp.json()}</arg>
+</arguments>
+<assign>
+<var>@{resp_json}</var>
+</assign>
+<msg timestamp="20170119 12:59:21.981" level="INFO">@{resp_json} = [ {u'name': u'Patch Policy Foo', u'schedule_time': u'01:00', u'schedule_days': 254, u'organization_id': 1, u'create_time': u'2017-01-02 01:47:06.774433', u'notes': u'Notes blah', u'policy_type_name': ...</msg>
+<status status="PASS" endtime="20170119 12:59:21.981" starttime="20170119 12:59:21.980"></status>
+</kw>
+<kw name="Policy List Should Contain Policy Details" library="HelperKeywords">
+<arguments>
+<arg>${resp_json}</arg>
+<arg>${json_string}</arg>
+</arguments>
+<msg timestamp="20170119 12:59:21.981" level="INFO">Policy Details found in Policy List: {u'name': u'api-sw-deployment-policy-01', u'schedule_time': u'14:10', u'schedule_days': 254, u'organization_id': 1, u'create_time': u'2017-01-19 07:29:42.262193', u'notes': u'This is api-sw-deployment-policy-01', u'policy_type_name': u'required_software', u'configuration': {u'os_family': u'Linux', u'installation_code': u'dnf install ftp', u'package_name': u'ftp'}, u'id': 105}</msg>
+<status status="PASS" endtime="20170119 12:59:21.982" starttime="20170119 12:59:21.981"></status>
+</kw>
+<status status="PASS" endtime="20170119 12:59:21.982" starttime="20170119 12:59:21.646"></status>
+</kw>
+<doc>**Test Case**
+User should be able to create Software Deployment Policy
+1. Create a software deployment policy with valid inputs
+2. Verify whether software deployment policy is created successfully</doc>
+<tags>
+<tag>api_tests</tag>
+</tags>
+<status status="PASS" endtime="20170119 12:59:21.983" critical="yes" starttime="20170119 12:59:21.303"></status>
+</test>
+<test id="s1-s1-t6" name="AX.TC7 Create a Custom Policy">
+<kw name="Create Custom Policy" library="api_keywords">
+<arguments>
+<arg>api-custom-policy-01</arg>
+<arg>${1}</arg>
+<arg>Linux</arg>
+<arg>test_code.sh</arg>
+<arg>evaluation_code.sh</arg>
+<arg>remediation_code.sh</arg>
+<arg>${254}</arg>
+<arg>14:10</arg>
+<arg>This is api-custom-policy-01</arg>
+</arguments>
+<kw name="Get File" library="OperatingSystem">
+<doc>Returns the contents of a specified file.</doc>
+<arguments>
+<arg>resources/custom_policy/linux/${test_code_path}</arg>
+</arguments>
+<assign>
+<var>${test_code}</var>
+</assign>
+<msg timestamp="20170119 12:59:21.986" html="yes" level="INFO">Getting file '&lt;a href="file://C:\workspace\projects\automox_tests\api_tests\resources\custom_policy\linux\test_code.sh"&gt;C:\workspace\projects\automox_tests\api_tests\resources\custom_policy\linux\test_code.sh&lt;/a&gt;'.</msg>
+<msg timestamp="20170119 12:59:21.987" level="INFO">${test_code} = #!\/bin\/bash\n\n#Example Test Script for installing chrome on Linux machines\n#This script has been tested with Fedora 24 and Ubuntu 16.04.01 LTS\n#This script may not work on all systems. Modify to ...</msg>
+<status status="PASS" endtime="20170119 12:59:21.987" starttime="20170119 12:59:21.986"></status>
+</kw>
+<kw name="Get File" library="OperatingSystem">
+<doc>Returns the contents of a specified file.</doc>
+<arguments>
+<arg>resources/custom_policy/linux/${evaluation_code_path}</arg>
+</arguments>
+<assign>
+<var>${evaluation_code}</var>
+</assign>
+<msg timestamp="20170119 12:59:21.988" html="yes" level="INFO">Getting file '&lt;a href="file://C:\workspace\projects\automox_tests\api_tests\resources\custom_policy\linux\evaluation_code.sh"&gt;C:\workspace\projects\automox_tests\api_tests\resources\custom_policy\linux\evaluation_code.sh&lt;/a&gt;'.</msg>
+<msg timestamp="20170119 12:59:21.988" level="INFO">${evaluation_code} = #!\/bin\/bash\n\n#Example Test Script for installing chrome on Linux machines\n#This script has been tested with Fedora 24 and Ubuntu 16.04.01 LTS\n#This script may not work on all systems. Modify to ...</msg>
+<status status="PASS" endtime="20170119 12:59:21.988" starttime="20170119 12:59:21.987"></status>
+</kw>
+<kw name="Get File" library="OperatingSystem">
+<doc>Returns the contents of a specified file.</doc>
+<arguments>
+<arg>resources/custom_policy/linux/${remediation_code_path}</arg>
+</arguments>
+<assign>
+<var>${remediation_code}</var>
+</assign>
+<msg timestamp="20170119 12:59:21.989" html="yes" level="INFO">Getting file '&lt;a href="file://C:\workspace\projects\automox_tests\api_tests\resources\custom_policy\linux\remediation_code.sh"&gt;C:\workspace\projects\automox_tests\api_tests\resources\custom_policy\linux\remediation_code.sh&lt;/a&gt;'.</msg>
+<msg timestamp="20170119 12:59:21.990" level="INFO">${remediation_code} = #!\/bin\/bash\n\n#Example Remediation Script for installing chrome on Linux machines\n#This script has been tested with Fedora 24 and Ubuntu 16.04.01 LTS\n#This script may not work on all systems. Mod...</msg>
+<status status="PASS" endtime="20170119 12:59:21.990" starttime="20170119 12:59:21.989"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>os_family=${os_family}</arg>
+<arg>test_code=${test_code}</arg>
+<arg>evaluation_code=${evaluation_code}</arg>
+<arg>remediation_code=${remediation_code}</arg>
+</arguments>
+<assign>
+<var>&amp;{configuration_dict}</var>
+</assign>
+<msg timestamp="20170119 12:59:21.991" level="INFO">&amp;{configuration_dict} = { os_family=Linux | test_code=#!\/bin\/bash\n\n#Example Test Script for installing chrome on Linux machines\n#This script has been tested with Fedora 24 and Ubuntu 16.04.01 LTS\n#This script may not w...</msg>
+<status status="PASS" endtime="20170119 12:59:21.991" starttime="20170119 12:59:21.990"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>name=${name}</arg>
+<arg>policy_type_name=custom</arg>
+<arg>organization_id=${organization_id}</arg>
+<arg>configuration=${configuration_dict}</arg>
+<arg>schedule_days=${schedule_days}</arg>
+<arg>schedule_time=${schedule_time}</arg>
+<arg>notes=${notes}</arg>
+</arguments>
+<assign>
+<var>&amp;{custom_policy_dict}</var>
+</assign>
+<msg timestamp="20170119 12:59:21.992" level="INFO">&amp;{custom_policy_dict} = { name=api-custom-policy-01 | policy_type_name=custom | organization_id=1 | configuration={u'os_family': u'Linux', u'test_code': u'#!\\/bin\\/bash\\n\\n#Example Test Script for installing chrome on Li...</msg>
+<status status="PASS" endtime="20170119 12:59:21.992" starttime="20170119 12:59:21.991"></status>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<doc>Evaluates the given expression in Python and returns the results.</doc>
+<arguments>
+<arg>json.dumps(${custom_policy_dict})</arg>
+<arg>json</arg>
+</arguments>
+<assign>
+<var>${json_string}</var>
+</assign>
+<msg timestamp="20170119 12:59:21.993" level="INFO">${json_string} = {"name": "api-custom-policy-01", "schedule_time": "14:10", "schedule_days": 254, "organization_id": 1, "policy_type_name": "custom", "configuration": {"test_code": "#!\\/bin\\/bash\\n\\n#Example Test ...</msg>
+<status status="PASS" endtime="20170119 12:59:21.993" starttime="20170119 12:59:21.992"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>o=${organization_id}</arg>
+</arguments>
+<assign>
+<var>${params}</var>
+</assign>
+<msg timestamp="20170119 12:59:21.994" level="INFO">${params} = {u'o': 1}</msg>
+<status status="PASS" endtime="20170119 12:59:21.994" starttime="20170119 12:59:21.994"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${json_string}</arg>
+</arguments>
+<msg timestamp="20170119 12:59:21.994" level="INFO">{"name": "api-custom-policy-01", "schedule_time": "14:10", "schedule_days": 254, "organization_id": 1, "policy_type_name": "custom", "configuration": {"test_code": "#!\\/bin\\/bash\\n\\n#Example Test Script for installing chrome on Linux machines\\n#This script has been tested with Fedora 24 and Ubuntu 16.04.01 LTS\\n#This script may not work on all systems. Modify to fit your needs\\n\\nfunction Test_Chrome() {\\n\\tcat \\/etc\\/*release* | grep -E '(Fedora|Red Hat)' &gt;&amp; \\/dev\\/null\\n\\tif [[ $? -eq 0 ]]; then\\n\\t\\t\\trpm -qa | grep \\\"google-chrome-stable\\\" &gt;&amp; \\/dev\\/null\\n\\t\\t\\tif [[ $? -eq 0 ]]; then\\n\\t\\t\\t\\techo \\\"Test_Chrome script has detected Chrome.\\\" 1&gt;&amp;2\\n\\t\\t\\t\\treturn 0 #package is installed\\n\\t\\t\\telse\\n\\t\\t\\t\\techo \\\"Test_Chrome Script failed! Remediation scipt needs to run\\\" 1&gt;&amp;2\\n\\t\\t\\t\\treturn 1 #package is not installed\\n\\t\\t\\tfi\\n\\n\\tfi\\n\\n\\tcat \\/etc\\/*release* | grep -E '(Ubuntu|Debian)' &amp;&gt; \\/dev\\/null\\n\\tif [[ $? -eq 0 ]]; then\\n\\t\\tdpkg -l | grep \\\"google-chrome-stable\\\" &gt;&amp; \\/dev\\/null\\n\\t\\tif [[ $? -eq 0 ]]; then\\n\\t\\t\\t\\techo \\\"Test_Chrome script has detected Chrome.\\\" 1&gt;&amp;2\\n\\t\\t\\t\\treturn 0\\n\\t\\t\\telse\\n\\t\\t\\t\\techo \\\"Test_Chrome Script failed! Remediation scipt needs to run\\\" 1&gt;&amp;2\\n\\t\\t\\t\\treturn 1\\n\\t\\t\\tfi\\n\\tfi\\n}\\nTest_Chrome\\nexit $?\\n\n", "os_family": "Linux", "evaluation_code": "#!\\/bin\\/bash\\n\\n#Example Test Script for installing chrome on Linux machines\\n#This script has been tested with Fedora 24 and Ubuntu 16.04.01 LTS\\n#This script may not work on all systems. Modify to fit your needs\\n\\nfunction Test_Chrome() {\\n\\tcat \\/etc\\/*release* | grep -E '(Fedora|Red Hat)' &gt;&amp; \\/dev\\/null\\n\\tif [[ $? -eq 0 ]]; then\\n\\t\\t\\trpm -qa | grep \\\"google-chrome-stable\\\" &gt;&amp; \\/dev\\/null\\n\\t\\t\\tif [[ $? -eq 0 ]]; then\\n\\t\\t\\t\\techo \\\"Test_Chrome script has detected Chrome.\\\" 1&gt;&amp;2\\n\\t\\t\\t\\treturn 0 #package is installed\\n\\t\\t\\telse\\n\\t\\t\\t\\techo \\\"Test_Chrome Script failed! Remediation scipt needs to run\\\" 1&gt;&amp;2\\n\\t\\t\\t\\treturn 1 #package is not installed\\n\\t\\t\\tfi\\n\\n\\tfi\\n\\n\\tcat \\/etc\\/*release* | grep -E '(Ubuntu|Debian)' &amp;&gt; \\/dev\\/null\\n\\tif [[ $? -eq 0 ]]; then\\n\\t\\tdpkg -l | grep \\\"google-chrome-stable\\\" &gt;&amp; \\/dev\\/null\\n\\t\\tif [[ $? -eq 0 ]]; then\\n\\t\\t\\t\\techo \\\"Test_Chrome script has detected Chrome.\\\" 1&gt;&amp;2\\n\\t\\t\\t\\treturn 0\\n\\t\\t\\telse\\n\\t\\t\\t\\techo \\\"Test_Chrome Script failed! Remediation scipt needs to run\\\" 1&gt;&amp;2\\n\\t\\t\\t\\treturn 1\\n\\t\\t\\tfi\\n\\tfi\\n}\\nTest_Chrome\\nexit $?\\n\n", "remediation_code": "#!\\/bin\\/bash\\n\\n#Example Remediation Script for installing chrome on Linux machines\\n#This script has been tested with Fedora 24 and Ubuntu 16.04.01 LTS\\n#This script may not work on all systems. Modify to fit your needs\\n\\ncat \\/etc\\/*release* | grep -E '(Fedora|Red Hat)' &gt;&amp; \\/dev\\/null\\nif [[ $? -eq 0 ]]; then\\n#Add Chrome Repo:\\necho \\\"[google-chrome]\\nname=google-chrome - \\\\$basearch\\nbaseurl=http:\\/\\/dl.google.com\\/linux\\/chrome\\/rpm\\/stable\\/\\\\$basearch\\nenabled=1\\ngpgcheck=1\\ngpgkey=https:\\/\\/dl-ssl.google.com\\/linux\\/linux_signing_key.pub\\\" &gt; \\/etc\\/yum.repos.d\\/google-chrome.repo\\n#Install Chrome:\\nyum install google-chrome-stable -y &amp;&gt; \\/dev\\/null\\nfi\\n\\ncat \\/etc\\/*release* | grep -E '(Ubuntu|Debian)' &gt;&amp; \\/dev\\/null\\nif [[ $? -eq 0 ]]; then\\n\\techo \\\"deb http:\\/\\/dl.google.com\\/linux\\/chrome\\/deb\\/ stable main\\\" &gt;&gt; \\/etc\\/apt\\/sources.list.d\\n\\twget -q -O - https:\\/\\/dl-ssl.google.com\\/linux\\/linux_signing_key.pub | apt-key add -\\n\\tapt-get update\\n\\tapt-get install google-chrome-stable -y &amp;&gt; \\/dev\\/null\\nfi\\n\n"}, "notes": "This is api-custom-policy-01"}</msg>
+<status status="PASS" endtime="20170119 12:59:21.994" starttime="20170119 12:59:21.994"></status>
+</kw>
+<kw name="Post Request" library="RequestsKeywords">
+<doc>Send a POST request on the session object found using the</doc>
+<arguments>
+<arg>automoxapi</arg>
+<arg>/policies</arg>
+<arg>data=${json_string}</arg>
+<arg>params=${params}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20170119 12:59:22.335" level="INFO">Post Request using : alias=automoxapi, uri=/policies, data=&lt;empty&gt;, headers=None, files=None, allow_redirects=True </msg>
+<msg timestamp="20170119 12:59:22.336" level="INFO">${resp} = &lt;Response [400]&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:22.336" starttime="20170119 12:59:21.995"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${resp.content}</arg>
+</arguments>
+<msg timestamp="20170119 12:59:22.336" level="INFO">{"errors":["A policy with this name already exists"]}</msg>
+<status status="PASS" endtime="20170119 12:59:22.336" starttime="20170119 12:59:22.336"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>201</arg>
+</arguments>
+<msg timestamp="20170119 12:59:22.337" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20170119 12:59:22.337" level="FAIL">400 != 201</msg>
+<status status="FAIL" endtime="20170119 12:59:22.337" starttime="20170119 12:59:22.337"></status>
+</kw>
+<status status="FAIL" endtime="20170119 12:59:22.337" starttime="20170119 12:59:21.985"></status>
+</kw>
+<status status="FAIL" endtime="20170119 12:59:22.339" critical="yes" starttime="20170119 12:59:21.985">400 != 201</status>
+</test>
+<kw type="teardown" name="API Suite Cleanup" library="api_keywords">
+<kw name="Run Keyword And Ignore Error" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<arguments>
+<arg>Delete Policy</arg>
+<arg>api-sw-deployment-policy-01</arg>
+<arg>${1}</arg>
+</arguments>
+<kw name="Delete Policy" library="api_keywords">
+<arguments>
+<arg>api-sw-deployment-policy-01</arg>
+<arg>${1}</arg>
+</arguments>
+<kw name="Get Request" library="RequestsKeywords">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>automoxapi</arg>
+<arg>/policies</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20170119 12:59:22.676" level="INFO">Get Request using : alias=automoxapi, uri=/policies, headers=None </msg>
+<msg timestamp="20170119 12:59:22.677" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:22.677" starttime="20170119 12:59:22.343"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${resp.json()}</arg>
+</arguments>
+<assign>
+<var>@{resp_json}</var>
+</assign>
+<msg timestamp="20170119 12:59:22.678" level="INFO">@{resp_json} = [ {u'name': u'Patch Policy Foo', u'schedule_time': u'01:00', u'schedule_days': 254, u'organization_id': 1, u'create_time': u'2017-01-02 01:47:06.774433', u'notes': u'Notes blah', u'policy_type_name': ...</msg>
+<status status="PASS" endtime="20170119 12:59:22.678" starttime="20170119 12:59:22.677"></status>
+</kw>
+<kw name="Get Policy Id" library="HelperKeywords">
+<arguments>
+<arg>${resp_json}</arg>
+<arg>${policy_name}</arg>
+</arguments>
+<assign>
+<var>${policy_id}</var>
+</assign>
+<msg timestamp="20170119 12:59:22.679" level="INFO">Policy ID for api-sw-deployment-policy-01 is105</msg>
+<msg timestamp="20170119 12:59:22.679" level="INFO">${policy_id} = 105</msg>
+<status status="PASS" endtime="20170119 12:59:22.679" starttime="20170119 12:59:22.678"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${policy_id}</arg>
+</arguments>
+<msg timestamp="20170119 12:59:22.679" level="INFO">105</msg>
+<status status="PASS" endtime="20170119 12:59:22.679" starttime="20170119 12:59:22.679"></status>
+</kw>
+<kw name="Convert To Integer" library="BuiltIn">
+<doc>Converts the given item to an integer number.</doc>
+<arguments>
+<arg>${policy_id}</arg>
+</arguments>
+<assign>
+<var>${policy_id_int}</var>
+</assign>
+<msg timestamp="20170119 12:59:22.680" level="INFO">${policy_id_int} = 105</msg>
+<status status="PASS" endtime="20170119 12:59:22.680" starttime="20170119 12:59:22.679"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>o=${organization_id}</arg>
+</arguments>
+<assign>
+<var>${params}</var>
+</assign>
+<msg timestamp="20170119 12:59:22.680" level="INFO">${params} = {u'o': 1}</msg>
+<status status="PASS" endtime="20170119 12:59:22.680" starttime="20170119 12:59:22.680"></status>
+</kw>
+<kw name="Delete Request" library="RequestsKeywords">
+<doc>Send a DELETE request on the session object found using the</doc>
+<arguments>
+<arg>automoxapi</arg>
+<arg>/policies/${policy_id_int}</arg>
+<arg>params=${params}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20170119 12:59:23.015" level="INFO">Delete Request using : alias=automoxapi, uri=/policies/105, data=(),                     headers=None, allow_redirects=True </msg>
+<msg timestamp="20170119 12:59:23.016" level="INFO">${resp} = &lt;Response [204]&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:23.016" starttime="20170119 12:59:22.680"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${resp.content}</arg>
+</arguments>
+<msg timestamp="20170119 12:59:23.016" level="INFO"></msg>
+<status status="PASS" endtime="20170119 12:59:23.016" starttime="20170119 12:59:23.016"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>204</arg>
+</arguments>
+<msg timestamp="20170119 12:59:23.017" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:23.017" starttime="20170119 12:59:23.016"></status>
+</kw>
+<status status="PASS" endtime="20170119 12:59:23.017" starttime="20170119 12:59:22.342"></status>
+</kw>
+<status status="PASS" endtime="20170119 12:59:23.017" starttime="20170119 12:59:22.342"></status>
+</kw>
+<kw name="Run Keyword And Ignore Error" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<arguments>
+<arg>Delete Policy</arg>
+<arg>api-patch-policy-01</arg>
+<arg>${1}</arg>
+</arguments>
+<kw name="Delete Policy" library="api_keywords">
+<arguments>
+<arg>api-patch-policy-01</arg>
+<arg>${1}</arg>
+</arguments>
+<kw name="Get Request" library="RequestsKeywords">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>automoxapi</arg>
+<arg>/policies</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20170119 12:59:23.346" level="INFO">Get Request using : alias=automoxapi, uri=/policies, headers=None </msg>
+<msg timestamp="20170119 12:59:23.347" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:23.347" starttime="20170119 12:59:23.018"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${resp.json()}</arg>
+</arguments>
+<assign>
+<var>@{resp_json}</var>
+</assign>
+<msg timestamp="20170119 12:59:23.348" level="INFO">@{resp_json} = [ {u'name': u'Patch Policy Foo', u'schedule_time': u'01:00', u'schedule_days': 254, u'organization_id': 1, u'create_time': u'2017-01-02 01:47:06.774433', u'notes': u'Notes blah', u'policy_type_name': ...</msg>
+<status status="PASS" endtime="20170119 12:59:23.348" starttime="20170119 12:59:23.347"></status>
+</kw>
+<kw name="Get Policy Id" library="HelperKeywords">
+<arguments>
+<arg>${resp_json}</arg>
+<arg>${policy_name}</arg>
+</arguments>
+<assign>
+<var>${policy_id}</var>
+</assign>
+<msg timestamp="20170119 12:59:23.349" level="INFO">Policy ID for api-patch-policy-01 is104</msg>
+<msg timestamp="20170119 12:59:23.349" level="INFO">${policy_id} = 104</msg>
+<status status="PASS" endtime="20170119 12:59:23.349" starttime="20170119 12:59:23.349"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${policy_id}</arg>
+</arguments>
+<msg timestamp="20170119 12:59:23.350" level="INFO">104</msg>
+<status status="PASS" endtime="20170119 12:59:23.350" starttime="20170119 12:59:23.350"></status>
+</kw>
+<kw name="Convert To Integer" library="BuiltIn">
+<doc>Converts the given item to an integer number.</doc>
+<arguments>
+<arg>${policy_id}</arg>
+</arguments>
+<assign>
+<var>${policy_id_int}</var>
+</assign>
+<msg timestamp="20170119 12:59:23.350" level="INFO">${policy_id_int} = 104</msg>
+<status status="PASS" endtime="20170119 12:59:23.350" starttime="20170119 12:59:23.350"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>o=${organization_id}</arg>
+</arguments>
+<assign>
+<var>${params}</var>
+</assign>
+<msg timestamp="20170119 12:59:23.351" level="INFO">${params} = {u'o': 1}</msg>
+<status status="PASS" endtime="20170119 12:59:23.351" starttime="20170119 12:59:23.350"></status>
+</kw>
+<kw name="Delete Request" library="RequestsKeywords">
+<doc>Send a DELETE request on the session object found using the</doc>
+<arguments>
+<arg>automoxapi</arg>
+<arg>/policies/${policy_id_int}</arg>
+<arg>params=${params}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20170119 12:59:23.670" level="INFO">Delete Request using : alias=automoxapi, uri=/policies/104, data=(),                     headers=None, allow_redirects=True </msg>
+<msg timestamp="20170119 12:59:23.670" level="INFO">${resp} = &lt;Response [204]&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:23.670" starttime="20170119 12:59:23.351"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${resp.content}</arg>
+</arguments>
+<msg timestamp="20170119 12:59:23.671" level="INFO"></msg>
+<status status="PASS" endtime="20170119 12:59:23.671" starttime="20170119 12:59:23.670"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>204</arg>
+</arguments>
+<msg timestamp="20170119 12:59:23.671" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:23.671" starttime="20170119 12:59:23.671"></status>
+</kw>
+<status status="PASS" endtime="20170119 12:59:23.671" starttime="20170119 12:59:23.017"></status>
+</kw>
+<status status="PASS" endtime="20170119 12:59:23.671" starttime="20170119 12:59:23.017"></status>
+</kw>
+<kw name="Run Keyword And Ignore Error" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<arguments>
+<arg>Delete Policy</arg>
+<arg>api-custom-policy-01</arg>
+<arg>${1}</arg>
+</arguments>
+<kw name="Delete Policy" library="api_keywords">
+<arguments>
+<arg>api-custom-policy-01</arg>
+<arg>${1}</arg>
+</arguments>
+<kw name="Get Request" library="RequestsKeywords">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>automoxapi</arg>
+<arg>/policies</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20170119 12:59:23.992" level="INFO">Get Request using : alias=automoxapi, uri=/policies, headers=None </msg>
+<msg timestamp="20170119 12:59:23.992" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:23.992" starttime="20170119 12:59:23.672"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${resp.json()}</arg>
+</arguments>
+<assign>
+<var>@{resp_json}</var>
+</assign>
+<msg timestamp="20170119 12:59:23.993" level="INFO">@{resp_json} = [ {u'name': u'Patch Policy Foo', u'schedule_time': u'01:00', u'schedule_days': 254, u'organization_id': 1, u'create_time': u'2017-01-02 01:47:06.774433', u'notes': u'Notes blah', u'policy_type_name': ...</msg>
+<status status="PASS" endtime="20170119 12:59:23.993" starttime="20170119 12:59:23.993"></status>
+</kw>
+<kw name="Get Policy Id" library="HelperKeywords">
+<arguments>
+<arg>${resp_json}</arg>
+<arg>${policy_name}</arg>
+</arguments>
+<assign>
+<var>${policy_id}</var>
+</assign>
+<msg timestamp="20170119 12:59:23.994" level="INFO">Policy ID for api-custom-policy-01 is103</msg>
+<msg timestamp="20170119 12:59:23.994" level="INFO">${policy_id} = 103</msg>
+<status status="PASS" endtime="20170119 12:59:23.994" starttime="20170119 12:59:23.993"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${policy_id}</arg>
+</arguments>
+<msg timestamp="20170119 12:59:23.994" level="INFO">103</msg>
+<status status="PASS" endtime="20170119 12:59:23.994" starttime="20170119 12:59:23.994"></status>
+</kw>
+<kw name="Convert To Integer" library="BuiltIn">
+<doc>Converts the given item to an integer number.</doc>
+<arguments>
+<arg>${policy_id}</arg>
+</arguments>
+<assign>
+<var>${policy_id_int}</var>
+</assign>
+<msg timestamp="20170119 12:59:23.995" level="INFO">${policy_id_int} = 103</msg>
+<status status="PASS" endtime="20170119 12:59:23.995" starttime="20170119 12:59:23.994"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>o=${organization_id}</arg>
+</arguments>
+<assign>
+<var>${params}</var>
+</assign>
+<msg timestamp="20170119 12:59:23.995" level="INFO">${params} = {u'o': 1}</msg>
+<status status="PASS" endtime="20170119 12:59:23.995" starttime="20170119 12:59:23.995"></status>
+</kw>
+<kw name="Delete Request" library="RequestsKeywords">
+<doc>Send a DELETE request on the session object found using the</doc>
+<arguments>
+<arg>automoxapi</arg>
+<arg>/policies/${policy_id_int}</arg>
+<arg>params=${params}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20170119 12:59:24.325" level="INFO">Delete Request using : alias=automoxapi, uri=/policies/103, data=(),                     headers=None, allow_redirects=True </msg>
+<msg timestamp="20170119 12:59:24.326" level="INFO">${resp} = &lt;Response [204]&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:24.326" starttime="20170119 12:59:23.995"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${resp.content}</arg>
+</arguments>
+<msg timestamp="20170119 12:59:24.326" level="INFO"></msg>
+<status status="PASS" endtime="20170119 12:59:24.326" starttime="20170119 12:59:24.326"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>204</arg>
+</arguments>
+<msg timestamp="20170119 12:59:24.327" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:24.327" starttime="20170119 12:59:24.326"></status>
+</kw>
+<status status="PASS" endtime="20170119 12:59:24.327" starttime="20170119 12:59:23.672"></status>
+</kw>
+<status status="PASS" endtime="20170119 12:59:24.327" starttime="20170119 12:59:23.672"></status>
+</kw>
+<kw name="Run Keyword And Ignore Error" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<arguments>
+<arg>Delete Policy Set</arg>
+<arg>api-policy-set-01</arg>
+<arg>${1}</arg>
+</arguments>
+<kw name="Delete Policy Set" library="api_keywords">
+<arguments>
+<arg>api-policy-set-01</arg>
+<arg>${1}</arg>
+</arguments>
+<kw name="Get Request" library="RequestsKeywords">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>automoxapi</arg>
+<arg>/policysets</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20170119 12:59:24.657" level="INFO">Get Request using : alias=automoxapi, uri=/policysets, headers=None </msg>
+<msg timestamp="20170119 12:59:24.658" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:24.658" starttime="20170119 12:59:24.328"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${resp.json()}</arg>
+</arguments>
+<assign>
+<var>@{resp_json}</var>
+</assign>
+<msg timestamp="20170119 12:59:24.658" level="INFO">@{resp_json} = [ {u'name': u'PolicySet 2', u'notes': u'Some more notes', u'organization_id': 1, u'create_time': u'2017-01-02 01:47:06.796947', u'policies': [], u'id': 2} | {u'name': u'PolicySet 1', u'notes': u'Some ...</msg>
+<status status="PASS" endtime="20170119 12:59:24.658" starttime="20170119 12:59:24.658"></status>
+</kw>
+<kw name="Get Policy Set Id" library="HelperKeywords">
+<arguments>
+<arg>${resp_json}</arg>
+<arg>${policy_set_name}</arg>
+</arguments>
+<assign>
+<var>${policy_set_id}</var>
+</assign>
+<msg timestamp="20170119 12:59:24.659" level="INFO">Policy Set ID for api-policy-set-01 is42</msg>
+<msg timestamp="20170119 12:59:24.659" level="INFO">${policy_set_id} = 42</msg>
+<status status="PASS" endtime="20170119 12:59:24.659" starttime="20170119 12:59:24.659"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${policy_set_id}</arg>
+</arguments>
+<msg timestamp="20170119 12:59:24.659" level="INFO">42</msg>
+<status status="PASS" endtime="20170119 12:59:24.659" starttime="20170119 12:59:24.659"></status>
+</kw>
+<kw name="Convert To Integer" library="BuiltIn">
+<doc>Converts the given item to an integer number.</doc>
+<arguments>
+<arg>${policy_set_id}</arg>
+</arguments>
+<assign>
+<var>${policy_set_id_int}</var>
+</assign>
+<msg timestamp="20170119 12:59:24.660" level="INFO">${policy_set_id_int} = 42</msg>
+<status status="PASS" endtime="20170119 12:59:24.660" starttime="20170119 12:59:24.660"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>o=${organization_id}</arg>
+</arguments>
+<assign>
+<var>${params}</var>
+</assign>
+<msg timestamp="20170119 12:59:24.661" level="INFO">${params} = {u'o': 1}</msg>
+<status status="PASS" endtime="20170119 12:59:24.661" starttime="20170119 12:59:24.660"></status>
+</kw>
+<kw name="Delete Request" library="RequestsKeywords">
+<doc>Send a DELETE request on the session object found using the</doc>
+<arguments>
+<arg>automoxapi</arg>
+<arg>/policysets/${policy_set_id_int}</arg>
+<arg>params=${params}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20170119 12:59:24.997" level="INFO">Delete Request using : alias=automoxapi, uri=/policysets/42, data=(),                     headers=None, allow_redirects=True </msg>
+<msg timestamp="20170119 12:59:24.997" level="INFO">${resp} = &lt;Response [204]&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:24.997" starttime="20170119 12:59:24.661"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${resp.content}</arg>
+</arguments>
+<msg timestamp="20170119 12:59:24.998" level="INFO"></msg>
+<status status="PASS" endtime="20170119 12:59:24.998" starttime="20170119 12:59:24.997"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>204</arg>
+</arguments>
+<msg timestamp="20170119 12:59:24.998" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:24.998" starttime="20170119 12:59:24.998"></status>
+</kw>
+<status status="PASS" endtime="20170119 12:59:24.999" starttime="20170119 12:59:24.327"></status>
+</kw>
+<status status="PASS" endtime="20170119 12:59:24.999" starttime="20170119 12:59:24.327"></status>
+</kw>
+<kw name="Run Keyword And Ignore Error" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<arguments>
+<arg>Delete Group</arg>
+<arg>api-group-01</arg>
+<arg>${1}</arg>
+</arguments>
+<kw name="Delete Group" library="api_keywords">
+<arguments>
+<arg>api-group-01</arg>
+<arg>${1}</arg>
+</arguments>
+<kw name="Get Request" library="RequestsKeywords">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>automoxapi</arg>
+<arg>/servergroups</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20170119 12:59:25.323" level="INFO">Get Request using : alias=automoxapi, uri=/servergroups, headers=None </msg>
+<msg timestamp="20170119 12:59:25.324" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:25.324" starttime="20170119 12:59:24.999"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${resp.json()}</arg>
+</arguments>
+<assign>
+<var>@{resp_json}</var>
+</assign>
+<msg timestamp="20170119 12:59:25.325" level="INFO">@{resp_json} = [ {u'name': u'', u'policy_set_id': 1, u'parent_server_group_id': 1, u'override': True, u'id': 1, u'refresh_interval': 1440} | {u'name': u'api-group-01', u'policy_set_id': None, u'parent_server_group_i...</msg>
+<status status="PASS" endtime="20170119 12:59:25.325" starttime="20170119 12:59:25.324"></status>
+</kw>
+<kw name="Get Group Id" library="HelperKeywords">
+<arguments>
+<arg>${resp_json}</arg>
+<arg>${group_name}</arg>
+</arguments>
+<assign>
+<var>${group_id}</var>
+</assign>
+<msg timestamp="20170119 12:59:25.325" level="INFO">Group ID for api-group-01 is38</msg>
+<msg timestamp="20170119 12:59:25.326" level="INFO">${group_id} = 38</msg>
+<status status="PASS" endtime="20170119 12:59:25.326" starttime="20170119 12:59:25.325"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${group_id}</arg>
+</arguments>
+<msg timestamp="20170119 12:59:25.326" level="INFO">38</msg>
+<status status="PASS" endtime="20170119 12:59:25.326" starttime="20170119 12:59:25.326"></status>
+</kw>
+<kw name="Convert To Integer" library="BuiltIn">
+<doc>Converts the given item to an integer number.</doc>
+<arguments>
+<arg>${group_id}</arg>
+</arguments>
+<assign>
+<var>${group_id_int}</var>
+</assign>
+<msg timestamp="20170119 12:59:25.326" level="INFO">${group_id_int} = 38</msg>
+<status status="PASS" endtime="20170119 12:59:25.326" starttime="20170119 12:59:25.326"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>o=${organization_id}</arg>
+</arguments>
+<assign>
+<var>${params}</var>
+</assign>
+<msg timestamp="20170119 12:59:25.327" level="INFO">${params} = {u'o': 1}</msg>
+<status status="PASS" endtime="20170119 12:59:25.327" starttime="20170119 12:59:25.327"></status>
+</kw>
+<kw name="Delete Request" library="RequestsKeywords">
+<doc>Send a DELETE request on the session object found using the</doc>
+<arguments>
+<arg>automoxapi</arg>
+<arg>/servergroups/${group_id_int}</arg>
+<arg>params=${params}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20170119 12:59:25.662" level="INFO">Delete Request using : alias=automoxapi, uri=/servergroups/38, data=(),                     headers=None, allow_redirects=True </msg>
+<msg timestamp="20170119 12:59:25.663" level="INFO">${resp} = &lt;Response [204]&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:25.663" starttime="20170119 12:59:25.327"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${resp.content}</arg>
+</arguments>
+<msg timestamp="20170119 12:59:25.663" level="INFO"></msg>
+<status status="PASS" endtime="20170119 12:59:25.664" starttime="20170119 12:59:25.663"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${resp.status_code}</arg>
+<arg>204</arg>
+</arguments>
+<msg timestamp="20170119 12:59:25.664" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170119 12:59:25.664" starttime="20170119 12:59:25.664"></status>
+</kw>
+<status status="PASS" endtime="20170119 12:59:25.664" starttime="20170119 12:59:24.999"></status>
+</kw>
+<status status="PASS" endtime="20170119 12:59:25.664" starttime="20170119 12:59:24.999"></status>
+</kw>
+<kw name="Delete All Sessions" library="RequestsKeywords">
+<doc>Removes all the session objects</doc>
+<msg timestamp="20170119 12:59:25.665" level="INFO">Delete All Sessions</msg>
+<status status="PASS" endtime="20170119 12:59:25.665" starttime="20170119 12:59:25.664"></status>
+</kw>
+<status status="PASS" endtime="20170119 12:59:25.665" starttime="20170119 12:59:22.342"></status>
+</kw>
+<doc>API Functional Tests for Automox</doc>
+<metadata>
+<item name="Executed At">LAPTOP-3RS03335</item>
+<item name="Operating System">Windows_NT</item>
+<item name="Processor">6</item>
+<item name="Test Framework">Robot Framework Python</item>
+<item name="Test User">CopperTaurus</item>
+<item name="Version">1.0</item>
+</metadata>
+<status status="FAIL" endtime="20170119 12:59:25.665" starttime="20170119 12:59:04.676"></status>
+</suite>
+<status status="FAIL" endtime="20170119 12:59:25.671" starttime="20170119 12:59:04.646"></status>
+</suite>
+<statistics>
+<total>
+<stat fail="1" pass="5">Critical Tests</stat>
+<stat fail="1" pass="5">All Tests</stat>
+</total>
+<tag>
+<stat fail="0" pass="5">api_tests</stat>
+</tag>
+<suite>
+<stat fail="1" id="s1" name="Tests" pass="5">Tests</stat>
+<stat fail="1" id="s1-s1" name="Api Tests" pass="5">Tests.Api Tests</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

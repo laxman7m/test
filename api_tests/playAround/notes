@@ -1,0 +1,1 @@
+Create Policy Set - ability to provide policy names as list input. Currently it supports empty policies, as per the test plan
